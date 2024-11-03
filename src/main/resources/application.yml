@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: OrarUBB-Backend 
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/OrarUBB
+    username: postgres
+    password: '*******' 
+  
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+management:
+  endpoints:
+    jmx:
+      exposure:
+        include: '*'
