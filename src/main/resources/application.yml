@@ -3,9 +3,9 @@ spring:
     name: OrarUBB-Backend 
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/OrarUBB
+    url: jdbc:postgresql://localhost:9876/postgres
     username: postgres
-    password: '*******' 
+    password: '*****'
   
   jpa:
     hibernate:
