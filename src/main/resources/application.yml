@@ -3,13 +3,14 @@ spring:
     name: OrarUBB-Backend 
 
   datasource:
-    url: jdbc:postgresql://localhost:9876/postgres
+    url: jdbc:postgresql://localhost:5432/orarubb
     username: postgres
-    password: '*****'
+    password: 'robi*4526'
   
   jpa:
     hibernate:
       ddl-auto: update
+    show-sql: true
 
 management:
   endpoints:
