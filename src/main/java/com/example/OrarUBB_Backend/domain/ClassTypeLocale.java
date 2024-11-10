@@ -41,7 +41,7 @@ public class ClassTypeLocale {
 
 
     @EqualsAndHashCode
-    public class ClassTypeLocaleId implements Serializable {
+    public static class ClassTypeLocaleId implements Serializable {
         private UUID classTypeId;
         private String languageTag;
 

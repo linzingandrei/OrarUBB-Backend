@@ -40,7 +40,7 @@ public class DayDefinitionLocale {
     private DayDefinition dayDefinition;
 
 @EqualsAndHashCode
-public class DayDefinitionLocaleId implements Serializable {
+public static class DayDefinitionLocaleId implements Serializable {
     private UUID dayId;
     private String languageTag;
 }

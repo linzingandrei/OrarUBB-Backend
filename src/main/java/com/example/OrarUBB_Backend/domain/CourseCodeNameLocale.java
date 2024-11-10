@@ -43,7 +43,7 @@ public class CourseCodeNameLocale {
 
 
     @EqualsAndHashCode
-    public class CourseCodeNameLocaleId implements Serializable {
+    public static class CourseCodeNameLocaleId implements Serializable {
         private UUID courseCodeNameId;
         private String languageTag;
 
