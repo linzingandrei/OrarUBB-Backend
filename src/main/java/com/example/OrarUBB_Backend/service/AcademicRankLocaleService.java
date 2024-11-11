@@ -1,12 +1,10 @@
 package com.example.OrarUBB_Backend.service;
 
 import com.example.OrarUBB_Backend.domain.AcademicRankLocale;
-import com.example.OrarUBB_Backend.domain.AcademicRankLocaleKey;
 import com.example.OrarUBB_Backend.repository.AcademicRankLocaleRepository;
 import com.example.OrarUBB_Backend.repository.AcademicRankRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +15,6 @@ public class AcademicRankLocaleService {
     private final AcademicRankRepository academicRankRepository;
     private final AcademicRankLocaleRepository academicRankLocaleRepository;
 
-    @Autowired
     public AcademicRankLocaleService(AcademicRankRepository academicRankRepository, AcademicRankLocaleRepository academicRankLocaleRepository) {
         this.academicRankLocaleRepository = academicRankLocaleRepository;
         this.academicRankRepository = academicRankRepository;

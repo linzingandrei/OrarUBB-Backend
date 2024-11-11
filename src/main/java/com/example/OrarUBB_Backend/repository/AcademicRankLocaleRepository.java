@@ -4,8 +4,6 @@ import com.example.OrarUBB_Backend.domain.AcademicRankLocale;
 import com.example.OrarUBB_Backend.domain.AcademicRankLocaleKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-
 public interface AcademicRankLocaleRepository extends JpaRepository<AcademicRankLocale, AcademicRankLocaleKey> {
     /*
     AcademicRank_AcademicRankId refers to the academicRankId field in the AcademicRank entity, which is part of the academicRank association in AcademicRankLocale.

@@ -16,9 +16,12 @@ import java.util.UUID;
 @Table(name = "teacher")
 public class Teacher {
     @Id
+    @Column(name = "teacher_id")
     private UUID teacherId;
 
+    @Column(name = "first_name")
     private String firstName;
+
     private String surname;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -2,7 +2,6 @@ package com.example.OrarUBB_Backend.service;
 
 import com.example.OrarUBB_Backend.domain.AcademicRank;
 import com.example.OrarUBB_Backend.repository.AcademicRankRepository;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

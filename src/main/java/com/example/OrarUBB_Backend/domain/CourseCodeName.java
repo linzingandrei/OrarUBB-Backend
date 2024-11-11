@@ -19,8 +19,8 @@ public class CourseCodeName {
     private UUID courseCodeNameId;
 
     @Column(name = "course_name", nullable = false)
-    private String course_name;
+    private String courseName;
 
     @Column(name = "course_name_abbreviaton", nullable = false)
-    private String course_name_abbreviaton;
+    private String courseNameAbbreviation;
 }

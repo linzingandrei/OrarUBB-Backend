@@ -1,18 +1,15 @@
 package com.example.OrarUBB_Backend.domain;
-import java.io.Serializable;
 import java.util.UUID;
 
-import com.example.OrarUBB_Backend.domain.CourseCodeNameLocale.CourseCodeNameLocaleId;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@IdClass(CourseCodeNameLocaleId.class)
+@IdClass(CourseCodeNameLocalePK.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -42,11 +39,4 @@ public class CourseCodeNameLocale {
     private CourseCodeName courseCodeName;
 
 
-    @EqualsAndHashCode
-    public static class CourseCodeNameLocaleId implements Serializable {
-        private UUID courseCodeNameId;
-        private String languageTag;
-
-        // Default constructor, getters, and setters if needed
-    }
 }

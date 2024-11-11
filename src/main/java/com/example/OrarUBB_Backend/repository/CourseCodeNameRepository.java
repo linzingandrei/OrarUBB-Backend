@@ -11,8 +11,8 @@ import java.util.UUID;
 public interface CourseCodeNameRepository extends JpaRepository<CourseCodeName, UUID> {
 
     // Custom query to find a CourseCodeName by course_name
-    Optional<CourseCodeName> findByCourseName(String course_name);
+    Optional<CourseCodeName> findByCourseName(String courseName);
 
     // Custom query to find a CourseCodeName by its abbreviation
-    Optional<CourseCodeName> findByCourseNameAbbreviation(String course_name_abbreviation);
+    Optional<CourseCodeName> findByCourseNameAbbreviation(String courseNameAbbreviation);
 }
