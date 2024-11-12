@@ -26,8 +26,8 @@ public class CourseCodeNameLocale {
     @Column(name = "course_name_locale",nullable = false)
     private String courseNameLocale;
 
-    @Column(name = "course_name_abbreviaton_locale", nullable = false)
-    private String courseNameAbbreviatonLocale;
+    @Column(name = "course_name_abbreviation_locale", nullable = false)
+    private String courseNameAbbreviationLocale;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(

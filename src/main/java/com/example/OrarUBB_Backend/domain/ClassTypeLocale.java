@@ -2,7 +2,6 @@ package com.example.OrarUBB_Backend.domain;
 import java.io.Serializable;
 import java.util.UUID;
 
-import com.example.OrarUBB_Backend.domain.ClassTypeLocale.ClassTypeLocaleId;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@IdClass(ClassTypeLocaleId.class)
+@IdClass(ClassTypeLocalePK.class)
 @Getter
 @Setter
 @NoArgsConstructor
@@ -20,31 +19,22 @@ import lombok.Setter;
 public class ClassTypeLocale {
 
     @Id
-    @Column(name = "class_type_id")
+    @Column(name = "class_type_id", insertable = false, updatable = false)
     private UUID classTypeId;
 
     @Id
     @Column(name = "language_tag")
     private String languageTag;
 
-    @Column(name = "class_type_locale", nullable = false)
+    @Column(name = "class_type_locale", insertable = false, updatable = false)
     private String classTypeLocale; 
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(
             name = "class_type_id",
-            referencedColumnName = "class_type_id",
-            insertable = false,
-            updatable = false
+            referencedColumnName = "class_type_id"
     )
     private ClassType classType;
 
 
-    @EqualsAndHashCode
-    public static class ClassTypeLocaleId implements Serializable {
-        private UUID classTypeId;
-        private String languageTag;
-
-        // Default constructor, getters, and setters (if needed)
-    }
 }

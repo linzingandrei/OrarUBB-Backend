@@ -21,6 +21,7 @@ public class TeacherService {
     private final AcademicRankLocaleRepository academicRankLocaleRepository;
     private final AcademicRankRepository academicRankRepository;
 
+    @Autowired
     public TeacherService(TeacherRepository teacherRepository, AcademicRankLocaleRepository academicRankLocaleRepository, AcademicRankRepository academicRankRepository) {
         this.teacherRepository = teacherRepository;
         this.academicRankLocaleRepository = academicRankLocaleRepository;

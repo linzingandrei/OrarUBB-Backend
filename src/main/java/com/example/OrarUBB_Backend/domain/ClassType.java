@@ -1,4 +1,5 @@
 package com.example.OrarUBB_Backend.domain;
+
 import java.util.UUID;
 
 import jakarta.persistence.*;
@@ -13,7 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ClassType {
-
     @Id
     @Column(name = "class_type_id")
     private UUID classTypeId;

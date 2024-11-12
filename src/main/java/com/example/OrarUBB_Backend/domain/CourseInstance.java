@@ -15,16 +15,16 @@ import lombok.Setter;
 public class CourseInstance {
 
     @Id
-    @Column(name = "course_instance_id", updatable = false, nullable = false)
+    @Column(name = "course_instance_id")
     private UUID courseInstanceId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "course_id", insertable=false, updatable=false)
+    private UUID courseId;
+
+    @ManyToOne()
     @JoinColumn(
             name = "course_id",
-            referencedColumnName = "course_codename_id",
-            insertable = false,
-            updatable = false,
-            nullable = false
+            referencedColumnName = "course_codename_id"
     )
     private CourseCodeName courseCodeName;
 

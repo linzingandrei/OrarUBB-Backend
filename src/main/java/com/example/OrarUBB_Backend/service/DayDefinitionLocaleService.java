@@ -15,7 +15,7 @@ public class DayDefinitionLocaleService {
     @Autowired
     private DayDefinitionLocaleRepository dayDefinitionLocaleRepository;
 
-    public Optional<DayDefinitionLocale> getLocaleByDayIdAndLanguage(UUID dayId, String languageTag) {
+    public DayDefinitionLocale getLocaleByDayIdAndLanguage(UUID dayId, String languageTag) {
         return dayDefinitionLocaleRepository.findByDayIdAndLanguageTag(dayId, languageTag);
     }
 
