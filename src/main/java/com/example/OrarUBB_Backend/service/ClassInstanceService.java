@@ -48,13 +48,39 @@ public class ClassInstanceService {
                 classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
                 classInstanceRepository.findFormationCodeByRoomId(classInstance.getFormationId()),
                 classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
-                classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId())
+                classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
+                classInstanceRepository.findTeacherNameByTeacherId(classInstance.getTeacherId())
             );
 
             responseDTOs.add(responseDTO);
         }
         
         return responseDTOs;
+    }
+
+    public List<ClassInstanceResponse> getClassesForCourseInstance(String courseCode, String language) {
+        List<ClassInstance> classInstances = classInstanceRepository.findByCourseCode(courseCode);
+
+        List<ClassInstanceResponse> responseDTOs = new ArrayList<>();
+
+        for (ClassInstance classInstance: classInstances) {
+            ClassInstanceResponse responseDTO = new ClassInstanceResponse(
+                classInstance.getClassId(),
+                classInstanceRepository.findClassDayByDayIdAndLanguage(classInstance.getDayId(), language),
+                classInstance.getStartHour(),
+                classInstance.getEndHour(),
+                classInstance.getFrequency(),
+                classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
+                classInstanceRepository.findFormationCodeByRoomId(classInstance.getFormationId()),
+                classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
+                classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
+                classInstanceRepository.findTeacherNameByTeacherId(classInstance.getTeacherId())
+            );
+
+            responseDTOs.add(responseDTO);
+        }
+
+        return responseDTOs; 
     }
 
     public List<ClassInstance> getAllClassInstances() {

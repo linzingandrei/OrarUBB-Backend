@@ -17,4 +17,5 @@ public class ClassInstanceResponse {
     private final String formation;
     private final String classType;
     private final String courseInstanceCode;
+    private final String teacher;
 }

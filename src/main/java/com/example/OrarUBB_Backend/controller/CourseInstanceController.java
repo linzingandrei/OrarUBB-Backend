@@ -1,10 +1,9 @@
 package com.example.OrarUBB_Backend.controller;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,16 +26,14 @@ public class CourseInstanceController {
     @GetMapping("/{language}")
     public ResponseEntity<List<CourseInstanceResponse>> getCourseFewDetailsInSpecifiedLanguage(
         @PathVariable("language") String language) {
-        List<CourseInstanceResponse> classes = courseInstanceService.getCoursesSmallDetailsInSpecifiedLanguage(language);
+        
+        Set<String> validLanguages = Set.of("ro-RO", "en-GB", "de-DE", "hu-HU");
+        
+        if (validLanguages.contains(language)) {
+            List<CourseInstanceResponse> classes = courseInstanceService.getCoursesSmallDetailsInSpecifiedLanguage(language);
+            return ResponseEntity.ok(classes);
+        }
 
-        return ResponseEntity.ok(classes);
-    }
-
-    @GetMapping("/{course_code}/{language}")
-    public ResponseEntity<List<CourseInstanceResponse>> getCourseDetailsForCourseCodeInSpecifiedLanguage(
-        @PathVariable("course_code") UUID courseCode,
-        @PathVariable("language") String language) {
-        List<CourseInstanceResponse> classes = courseInstanceService.getCourseDetailsForCourseCodeInSpecifiedLanguage(courseCode, language);
-        return ResponseEntity.ok(classes);
+        return ResponseEntity.badRequest().build();
     }
 }
