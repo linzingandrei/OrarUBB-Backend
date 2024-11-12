@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.OrarUBB_Backend.domain.ClassInstance;
@@ -14,17 +13,19 @@ import com.example.OrarUBB_Backend.dto.ClassInstanceResponse;
 import com.example.OrarUBB_Backend.repository.ClassInstanceRepository;
 import com.example.OrarUBB_Backend.repository.DayDefinitionLocaleRepository;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class ClassInstanceService {
-    @Autowired
     private final ClassInstanceRepository classInstanceRepository;
-    @Autowired
-    private DayDefinitionLocaleRepository dayDefinitionLocaleRepository;
+    private final DayDefinitionLocaleRepository dayDefinitionLocaleRepository;
+
+    public ClassInstanceService(ClassInstanceRepository classInstanceRepository,
+            DayDefinitionLocaleRepository dayDefinitionLocaleRepository) {
+        this.classInstanceRepository = classInstanceRepository;
+        this.dayDefinitionLocaleRepository = dayDefinitionLocaleRepository;
+    }
 
     public String getClassDayLocalized(UUID dayId, String language) {
         DayDefinitionLocale dayLocale = dayDefinitionLocaleRepository.findByDayIdAndLanguageTag(dayId, language);

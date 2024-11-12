@@ -4,7 +4,6 @@ import com.example.OrarUBB_Backend.domain.CourseInstance;
 import com.example.OrarUBB_Backend.dto.CourseInstanceResponse;
 import com.example.OrarUBB_Backend.repository.CourseInstanceRepository;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,8 +13,11 @@ import java.util.UUID;
 
 @Service
 public class CourseInstanceService {
-    @Autowired
-    private CourseInstanceRepository courseInstanceRepository;
+    private final CourseInstanceRepository courseInstanceRepository;
+
+    public CourseInstanceService(CourseInstanceRepository courseInstanceRepository) {
+        this.courseInstanceRepository = courseInstanceRepository;
+    }
 
     // Method to get a CourseInstance by courseCode
     public Optional<CourseInstance> getCourseInstanceByCourseCode(String courseCode) {

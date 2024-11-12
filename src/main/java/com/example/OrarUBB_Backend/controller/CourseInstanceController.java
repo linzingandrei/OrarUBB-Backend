@@ -16,7 +16,6 @@ import com.example.OrarUBB_Backend.service.CourseInstanceService;
 @RestController
 @RequestMapping("/course_instances")
 public class CourseInstanceController {
-    @Autowired
     private final CourseInstanceService courseInstanceService;
 
     public CourseInstanceController(CourseInstanceService courseInstanceService) {

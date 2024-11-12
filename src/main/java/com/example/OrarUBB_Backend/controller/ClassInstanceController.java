@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RestController
 @RequestMapping("/classes")
 public class ClassInstanceController {
-    @Autowired
     private final ClassInstanceService classInstanceService;
 
     public ClassInstanceController(ClassInstanceService classInstanceService) {
