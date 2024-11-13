@@ -12,6 +12,8 @@ public interface FormationRepository extends JpaRepository<Formation, UUID> {
 
     List<Formation> findByYear(int year);
 
+    List<Formation> findByAcademicSpecialization_AcademicSpecializationId(UUID academicSpecializationId);
+
     List<Formation> findByFormationLevel(int formationLevel);
 
     List<Formation> findByComponents(String components);
