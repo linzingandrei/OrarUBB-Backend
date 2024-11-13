@@ -17,7 +17,7 @@ import lombok.Setter;
 public class CourseCodeNameLocale {
     @Id
     @Column(name = "course_codename_id")
-    private UUID courseCodeNameId;
+    private int courseCodeNameId;
 
     @Id
     @Column(name = "language_tag", nullable = false)

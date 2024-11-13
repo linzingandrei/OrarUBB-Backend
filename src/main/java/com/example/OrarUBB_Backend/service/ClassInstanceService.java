@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
 import org.springframework.stereotype.Service;
 
 import com.example.OrarUBB_Backend.domain.ClassInstance;
@@ -20,14 +21,18 @@ import lombok.extern.slf4j.Slf4j;
 public class ClassInstanceService {
     private final ClassInstanceRepository classInstanceRepository;
     private final DayDefinitionLocaleRepository dayDefinitionLocaleRepository;
+    private final DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration;
+    private final TeacherService teacherService;
 
     public ClassInstanceService(ClassInstanceRepository classInstanceRepository,
-            DayDefinitionLocaleRepository dayDefinitionLocaleRepository) {
+                                DayDefinitionLocaleRepository dayDefinitionLocaleRepository, DataSourceTransactionManagerAutoConfiguration dataSourceTransactionManagerAutoConfiguration, TeacherService teacherService) {
         this.classInstanceRepository = classInstanceRepository;
         this.dayDefinitionLocaleRepository = dayDefinitionLocaleRepository;
+        this.dataSourceTransactionManagerAutoConfiguration = dataSourceTransactionManagerAutoConfiguration;
+        this.teacherService = teacherService;
     }
 
-    public String getClassDayLocalized(UUID dayId, String language) {
+    public String getClassDayLocalized(int dayId, String language) {
         DayDefinitionLocale dayLocale = dayDefinitionLocaleRepository.findByDayIdAndLanguageTag(dayId, language);
         return dayLocale != null ? dayLocale.getDayNameLocale() : null;
     }
@@ -37,51 +42,54 @@ public class ClassInstanceService {
 
         List<ClassInstanceResponse> responseDTOs = new ArrayList<>();
 
-        for (ClassInstance classInstance: classInstances) {
-            String localizedClassDay = getClassDayLocalized(classInstance.getClassId(), language);
+        for (ClassInstance classInstance : classInstances) {
+            String localizedClassDay = getClassDayLocalized(classInstance.getDayId(), language);
 
+//            System.out.println(                classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()));
             ClassInstanceResponse responseDTO = new ClassInstanceResponse(
-                classInstance.getClassId(),
-                localizedClassDay,
-                classInstance.getStartHour(),
-                classInstance.getEndHour(),
-                classInstance.getFrequency(),
-                classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
-                classInstanceRepository.findFormationCodeByRoomId(classInstance.getFormationId()),
-                classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
-                classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
-                classInstanceRepository.findTeacherNameByTeacherId(classInstance.getTeacherId())
+                    classInstance.getClassId(),
+                    localizedClassDay,
+                    classInstance.getStartHour(),
+                    classInstance.getEndHour(),
+                    classInstance.getFrequency(),
+                    classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
+
+                    classInstanceRepository.findFormationCodeByFormationId(classInstance.getFormationId()),
+                    classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
+                    classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
+                    classInstanceRepository.findTeacherNameByTeacherId(classInstance.getTeacherId())
             );
 
             responseDTOs.add(responseDTO);
         }
-        
+
         return responseDTOs;
     }
+
 
     public List<ClassInstanceResponse> getClassesForCourseInstance(String courseCode, String language) {
         List<ClassInstance> classInstances = classInstanceRepository.findByCourseCode(courseCode);
 
         List<ClassInstanceResponse> responseDTOs = new ArrayList<>();
 
-        for (ClassInstance classInstance: classInstances) {
+        for (ClassInstance classInstance : classInstances) {
             ClassInstanceResponse responseDTO = new ClassInstanceResponse(
-                classInstance.getClassId(),
-                classInstanceRepository.findClassDayByDayIdAndLanguage(classInstance.getDayId(), language),
-                classInstance.getStartHour(),
-                classInstance.getEndHour(),
-                classInstance.getFrequency(),
-                classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
-                classInstanceRepository.findFormationCodeByRoomId(classInstance.getFormationId()),
-                classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
-                classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
-                classInstanceRepository.findTeacherNameByTeacherId(classInstance.getTeacherId())
+                    classInstance.getClassId(),
+                    classInstanceRepository.findClassDayByDayIdAndLanguage(classInstance.getDayId(), language),
+                    classInstance.getStartHour(),
+                    classInstance.getEndHour(),
+                    classInstance.getFrequency(),
+                    classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
+                    classInstanceRepository.findFormationCodeByFormationId(classInstance.getFormationId()),
+                    classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
+                    classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
+                    teacherService.getTeacherWithLocalizedNames(classInstance.getTeacherId(), language).getName()
             );
 
             responseDTOs.add(responseDTO);
         }
 
-        return responseDTOs; 
+        return responseDTOs;
     }
 
     public List<ClassInstance> getAllClassInstances() {
@@ -90,7 +98,7 @@ public class ClassInstanceService {
 
     public ClassInstance getClassInstanceById(UUID classInstanceId) {
         Optional<ClassInstance> optionalClassInstace = classInstanceRepository.findById(classInstanceId);
-        
+
         if (optionalClassInstace.isPresent()) {
             return optionalClassInstace.get();
         }

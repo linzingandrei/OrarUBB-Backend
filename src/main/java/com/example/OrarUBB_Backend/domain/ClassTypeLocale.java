@@ -20,7 +20,7 @@ public class ClassTypeLocale {
 
     @Id
     @Column(name = "class_type_id", insertable = false, updatable = false)
-    private UUID classTypeId;
+    private int classTypeId;
 
     @Id
     @Column(name = "language_tag")

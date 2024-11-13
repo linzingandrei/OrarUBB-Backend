@@ -14,8 +14,8 @@ import java.util.UUID;
 public interface ClassTypeLocaleRepository extends JpaRepository<ClassTypeLocale, ClassTypeLocalePK> {
 
     // Custom query to find a localized class type by classTypeId and languageTag
-    Optional<ClassTypeLocale> findByClassTypeIdAndLanguageTag(UUID classTypeId, String languageTag);
+    Optional<ClassTypeLocale> findByClassTypeIdAndLanguageTag(int classTypeId, String languageTag);
 
     // Custom query to find all locales for a given classTypeId
-    List<ClassTypeLocale> findAllByClassTypeId(UUID classTypeId);
+    List<ClassTypeLocale> findAllByClassTypeId(int classTypeId);
 }

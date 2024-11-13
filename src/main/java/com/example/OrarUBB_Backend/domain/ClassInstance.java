@@ -23,7 +23,7 @@ public class ClassInstance {
     private UUID classId;
 
     @Column(name = "class_day_id", insertable=false, updatable=false)
-    private UUID dayId;
+    private int dayId;
 
     @ManyToOne
     @JoinColumn(
@@ -42,7 +42,7 @@ public class ClassInstance {
     private int frequency;
 
     @Column(name = "room_id", insertable=false, updatable=false)
-    private UUID roomId;
+    private int roomId;
 
     @ManyToOne
     @JoinColumn(
@@ -62,7 +62,7 @@ public class ClassInstance {
     private Formation formation;
 
     @Column(name = "class_type_id", insertable = false, updatable = false)
-    private UUID classTypeId;
+    private int classTypeId;
 
     @ManyToOne
     @JoinColumn(

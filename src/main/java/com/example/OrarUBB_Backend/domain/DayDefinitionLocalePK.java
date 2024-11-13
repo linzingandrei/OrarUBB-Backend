@@ -7,6 +7,6 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public class DayDefinitionLocalePK implements Serializable {
-    private UUID dayId;
+    private int dayId;
     private String languageTag;
 }

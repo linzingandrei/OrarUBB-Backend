@@ -9,7 +9,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class CourseInstanceResponse {
     private final UUID courseInstanceId;
-    private final UUID courseId;
+    private final int courseId;
     private final String courseName;
     private final String courseCode;
 }

@@ -15,11 +15,11 @@ public class CourseCodeNameLocaleService {
     @Autowired
     private CourseCodeNameLocaleRepository courseCodeNameLocaleRepository;
 
-    public Optional<CourseCodeNameLocale> getLocalizedCourseName(UUID courseCodeNameId, String languageTag) {
+    public Optional<CourseCodeNameLocale> getLocalizedCourseName(int courseCodeNameId, String languageTag) {
         return courseCodeNameLocaleRepository.findByCourseCodeNameIdAndLanguageTag(courseCodeNameId, languageTag);
     }
 
-    public List<CourseCodeNameLocale> getAllLocalesForCourse(UUID courseCodeNameId) {
+    public List<CourseCodeNameLocale> getAllLocalesForCourse(int courseCodeNameId) {
         return courseCodeNameLocaleRepository.findAllByCourseCodeNameId(courseCodeNameId);
     }
 }

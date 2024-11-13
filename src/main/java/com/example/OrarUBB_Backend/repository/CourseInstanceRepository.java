@@ -11,19 +11,19 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface CourseInstanceRepository extends JpaRepository<CourseInstance, UUID> {
+public interface CourseInstanceRepository extends JpaRepository<CourseInstance, Integer> {
 
     // Custom query to find a CourseInstance by courseCode
     Optional<CourseInstance> findByCourseCode(String courseCode);
 
     // Custom query to find a CourseInstance by courseCodeNameId
-    Optional<CourseInstance> findByCourseCodeName_CourseCodeNameId(UUID courseCodeNameId);
+    Optional<CourseInstance> findByCourseCodeName_CourseCodeNameId(int courseCodeNameId);
 
     // Custom query to find all instances by courseCodeNameId
-    List<CourseInstance> findAllByCourseCodeName_CourseCodeNameId(UUID courseCodeNameId);
+    List<CourseInstance> findAllByCourseCodeName_CourseCodeNameId(int courseCodeNameId);
 
-    @Query("SELECT c FROM CourseCodeNameLocale c WHERE c.languageTag = :languageTag")
-    public List<CourseInstance> findByLanguage(@Param("languageTag") String language);
+//    @Query("SELECT c FROM CourseCodeNameLocale c WHERE c.languageTag = :languageTag")
+//    public List<CourseInstance> findByLanguage(@Param("languageTag") String language);
 
     @Query("SELECT c.courseNameLocale FROM CourseCodeNameLocale c WHERE c.courseCodeNameId = :courseInstanceId AND c.languageTag = :languageTag")
     public String findCourseNameByCourseInstanceIdAndLanguage(@Param("courseInstanceId") UUID courseInstanceId, @Param("languageTag") String language);

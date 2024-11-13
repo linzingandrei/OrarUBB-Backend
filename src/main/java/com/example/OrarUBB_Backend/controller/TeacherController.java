@@ -20,6 +20,7 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
 
+
     @GetMapping("/{language}")
     public List<TeacherResponse> getTeachersByLanguage(@PathVariable("language") String language) {
         return teacherService.getTeachersWithLocalizedNames(language);

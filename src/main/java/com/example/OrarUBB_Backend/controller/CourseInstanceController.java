@@ -24,6 +24,7 @@ public class CourseInstanceController {
 
     @GetMapping("/{language}")
     public ResponseEntity<List<CourseInstanceResponse>> getCourseFewDetailsInSpecifiedLanguage(
+            // BROKEN
         @PathVariable("language") String language) {
         
         Set<String> validLanguages = Set.of("ro-RO", "en-GB", "de-DE", "hu-HU");

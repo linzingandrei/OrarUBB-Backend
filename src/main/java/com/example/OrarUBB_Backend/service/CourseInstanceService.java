@@ -25,21 +25,24 @@ public class CourseInstanceService {
     }
 
     // Method to get a CourseInstance by courseCodeNameId
-    public Optional<CourseInstance> getCourseInstanceByCourseCodeNameId(UUID courseCodeNameId) {
+    public Optional<CourseInstance> getCourseInstanceByCourseCodeNameId(int courseCodeNameId) {
         return courseInstanceRepository.findByCourseCodeName_CourseCodeNameId(courseCodeNameId);
     }
 
     // Method to get all instances for a given courseCodeNameId
-    public List<CourseInstance> getAllInstancesByCourseCodeNameId(UUID courseCodeNameId) {
+    public List<CourseInstance> getAllInstancesByCourseCodeNameId(int courseCodeNameId) {
         return courseInstanceRepository.findAllByCourseCodeName_CourseCodeNameId(courseCodeNameId);
     }
 
     public List<CourseInstanceResponse> getCoursesSmallDetailsInSpecifiedLanguage(String language) {
-        List<CourseInstance> courseInstances = courseInstanceRepository.findByLanguage(language);
+//        List<CourseInstance> courseInstances = courseInstanceRepository.findByLanguage(language);
+
+        List<CourseInstance> courseInstances = courseInstanceRepository.findAll();
 
         List<CourseInstanceResponse> responseDTOs = new ArrayList<>();
 
         for (CourseInstance courseInstance: courseInstances) {
+            System.out.println(courseInstance.getCourseInstanceId());
             CourseInstanceResponse responseDTO = new CourseInstanceResponse(
                 courseInstance.getCourseInstanceId(),
                 courseInstance.getCourseId(),

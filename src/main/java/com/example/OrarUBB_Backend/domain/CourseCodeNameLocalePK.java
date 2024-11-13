@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
 public class CourseCodeNameLocalePK implements Serializable {
-    private UUID courseCodeNameId;
+    private int courseCodeNameId;
     private String languageTag;
 
     // Default constructor, getters, and setters if needed

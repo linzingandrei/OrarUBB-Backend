@@ -16,7 +16,7 @@ import lombok.Setter;
 public class ClassType {
     @Id
     @Column(name = "class_type_id")
-    private UUID classTypeId;
+    private int classTypeId;
 
     @Column(name = "class_type", nullable = false)
     private String classType; 

@@ -15,11 +15,11 @@ public class DayDefinitionLocaleService {
     @Autowired
     private DayDefinitionLocaleRepository dayDefinitionLocaleRepository;
 
-    public DayDefinitionLocale getLocaleByDayIdAndLanguage(UUID dayId, String languageTag) {
+    public DayDefinitionLocale getLocaleByDayIdAndLanguage(int dayId, String languageTag) {
         return dayDefinitionLocaleRepository.findByDayIdAndLanguageTag(dayId, languageTag);
     }
 
-    public List<DayDefinitionLocale> getLocalesByDayId(UUID dayId) {
+    public List<DayDefinitionLocale> getLocalesByDayId(int dayId) {
         return dayDefinitionLocaleRepository.findAllByDayId(dayId);
     }
 }

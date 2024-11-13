@@ -14,8 +14,8 @@ import java.util.UUID;
 public interface CourseCodeNameLocaleRepository extends JpaRepository<CourseCodeNameLocale, CourseCodeNameLocalePK> {
 
     // Custom query to find a localized course name by courseCodeNameId and languageTag
-    Optional<CourseCodeNameLocale> findByCourseCodeNameIdAndLanguageTag(UUID courseCodeNameId, String languageTag);
+    Optional<CourseCodeNameLocale> findByCourseCodeNameIdAndLanguageTag(int courseCodeNameId, String languageTag);
 
     // Custom query to find all locales for a specific courseCodeNameId
-    List<CourseCodeNameLocale> findAllByCourseCodeNameId(UUID courseCodeNameId);
+    List<CourseCodeNameLocale> findAllByCourseCodeNameId(int courseCodeNameId);
 }

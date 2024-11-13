@@ -20,7 +20,7 @@ public class DayDefinitionLocale {
 
     @Id
     @Column(name = "day_definition_id", insertable = false, updatable = false)
-    private UUID dayId;
+    private int dayId;
 
     @Id
     @Column(name = "language_tag")

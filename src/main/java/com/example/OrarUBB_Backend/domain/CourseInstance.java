@@ -19,7 +19,7 @@ public class CourseInstance {
     private UUID courseInstanceId;
 
     @Column(name = "course_id", insertable=false, updatable=false)
-    private UUID courseId;
+    private int courseId;
 
     @ManyToOne()
     @JoinColumn(

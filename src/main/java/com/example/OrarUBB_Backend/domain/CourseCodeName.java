@@ -16,7 +16,7 @@ public class CourseCodeName {
 
     @Id
     @Column(name = "course_codename_id")
-    private UUID courseCodeNameId;
+    private int courseCodeNameId;
 
     @Column(name = "course_name", nullable = false)
     private String courseName;

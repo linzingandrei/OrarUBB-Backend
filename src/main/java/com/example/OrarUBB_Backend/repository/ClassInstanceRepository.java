@@ -16,13 +16,16 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, UU
 
     // public String findClassDayByDayIdAndLanguage(int dayId, String language);
     @Query("SELECT d.dayNameLocale FROM DayDefinitionLocale d WHERE d.dayId = :dayId AND d.languageTag = :languageTag")
-    public String findClassDayByDayIdAndLanguage(@Param("dayId") UUID dayId, @Param("languageTag") String language);
+    public String findClassDayByDayIdAndLanguage(@Param("dayId") int dayId, @Param("languageTag") String language);
 
+    @Query("SELECT t.firstName FROM Teacher t WHERE t.teacherId = :teacherId")
     public String findTeacherNameByTeacherId(UUID teacherId);
 
-    public String findRoomNameByRoomId(UUID roomId);
+    @Query("SELECT r.name FROM Room r WHERE r.roomId = :roomId")
+    public String findRoomNameByRoomId(@Param("roomId") int roomId);
 
-    public String findFormationCodeByRoomId(UUID formationId);
+    @Query("SELECT f.code FROM Formation f WHERE f.formationId = :formationId")
+    public String findFormationCodeByFormationId(@Param("formationId") UUID formationId);
 
     // @Query("SELECT ci" + 
         // "FROM ClassInstance ci join ci.courseInstance c" +
@@ -37,7 +40,8 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, UU
     public List<ClassInstance> findByCourseCode(@Param("courseCode") String courseCode);
 
     @Query("SELECT c.classTypeLocale FROM ClassTypeLocale c WHERE c.classTypeId = :classTypeId AND c.languageTag = :languageTag")
-    public String findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(@Param("classTypeId") UUID classTypeId, @Param("languageTag") String language);
+    public String findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(@Param("classTypeId") int classTypeId, @Param("languageTag") String language);
 
-    public String findCourseInstanceCodeInCourseInstanceByCourseInstanceId(UUID courseInstanceId);
+    @Query("SELECT c.courseCode FROM CourseInstance c WHERE c.courseInstanceId = :courseInstanceId")
+    public String findCourseInstanceCodeInCourseInstanceByCourseInstanceId(@Param("courseInstanceId") UUID courseInstanceId);
 }
