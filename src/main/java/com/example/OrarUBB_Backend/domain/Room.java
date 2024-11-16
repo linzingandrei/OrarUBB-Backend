@@ -16,7 +16,7 @@ public class Room {
 
     @Id
     @Column(name = "room_id")
-    private UUID roomId;
+    private int roomId;
 
     @Column
     private String name;

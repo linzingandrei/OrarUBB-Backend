@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface RoomRepository extends JpaRepository<Room, UUID> {
+public interface RoomRepository extends JpaRepository<Room, Integer> {
 
     List<Room> findByName(String name);
 

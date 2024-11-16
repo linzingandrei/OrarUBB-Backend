@@ -18,7 +18,7 @@ public class AcademicSpecializationLocale {
 
     @Id
     @Column(name = "academic_specialization_id")
-    private UUID academicSpecializationId;
+    private int academicSpecializationId;
 
     @Id
     @Column(name = "language_tag")
@@ -47,7 +47,7 @@ public class AcademicSpecializationLocale {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class AcademicSpecializationLocaleId implements Serializable {
-        private UUID academicSpecializationId;
+        private int academicSpecializationId;
         private String languageTag;
 
         @Override public boolean equals(Object o) {

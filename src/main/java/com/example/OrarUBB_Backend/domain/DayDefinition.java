@@ -16,7 +16,7 @@ public class DayDefinition {
 
     @Id
     @Column(name = "day_definition_id")
-    private UUID dayId;
+    private int dayId;
 
     @Column(name = "day_name", nullable = false)
     private String dayName; 

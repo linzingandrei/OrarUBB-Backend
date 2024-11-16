@@ -8,13 +8,14 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class ClassInstanceResponse {
-    private UUID classId;
-    private int classDayId;
-    private int startHour;
-    private int endHour;
-    private int frequency;
-    private UUID roomId;
-    private UUID formationId;
-    private int classTypeId;
-    private UUID courseInstanceId;
+    private final UUID classId;
+    private final String classDay;
+    private final int startHour;
+    private final int endHour;
+    private final int frequency;
+    private final String room;
+    private final String formation;
+    private final String classType;
+    private final String courseInstanceCode;
+    private final String teacher;
 }

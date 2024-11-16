@@ -24,7 +24,13 @@ public class Teacher {
 
     private String surname;
 
+    @Column(name = "code_name")
+    private String codeName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "academic_rank_id")
     private AcademicRank academicRank;
+
+
+
 }

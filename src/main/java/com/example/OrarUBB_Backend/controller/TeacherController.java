@@ -2,11 +2,9 @@ package com.example.OrarUBB_Backend.controller;
 
 import com.example.OrarUBB_Backend.dto.TeacherResponse;
 import com.example.OrarUBB_Backend.service.TeacherService;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -19,8 +17,10 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
 
+
+    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{language}")
-    public List<TeacherResponse> getTeachersByLanguage(@PathVariable String language) {
+    public List<TeacherResponse> getTeachersByLanguage(@PathVariable("language") String language) {
         return teacherService.getTeachersWithLocalizedNames(language);
     }
 }

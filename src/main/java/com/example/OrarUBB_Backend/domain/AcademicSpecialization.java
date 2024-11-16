@@ -16,7 +16,7 @@ public class AcademicSpecialization {
 
     @Id
     @Column(name = "academic_specialization_id")
-    private UUID academicSpecializationId;
+    private int academicSpecializationId;
 
     @Column(nullable = false, name = "internal_name")
     private String internalName;

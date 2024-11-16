@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface ClassTypeRepository extends JpaRepository<ClassType, UUID> {
+public interface ClassTypeRepository extends JpaRepository<ClassType, Integer> {
 
     // Custom query to find a ClassType by its classType name
     Optional<ClassType> findByClassType(String classType);
