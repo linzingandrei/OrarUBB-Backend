@@ -22,7 +22,7 @@ public class GroupController {
     }
 
     @GetMapping("/:academicSpecializationId/:year")
-    public List<GroupResponse> getAllGroupsForAcademicSpecializationForYear(@PathVariable UUID academicSpecializationId, @PathVariable int year) {
+    public List<GroupResponse> getAllGroupsForAcademicSpecializationForYear(@PathVariable int academicSpecializationId, @PathVariable int year) {
         return formationService.getAllGroupsForAcademicSpecializationAndYear(academicSpecializationId, year);
     }
 }

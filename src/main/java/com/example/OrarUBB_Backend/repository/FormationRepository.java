@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface FormationRepository extends JpaRepository<Formation, UUID> {
+public interface FormationRepository extends JpaRepository<Formation, Integer> {
 
     List<Formation> findByCode(String code);
 
     List<Formation> findByYear(int year);
 
-    List<Formation> findByAcademicSpecialization_AcademicSpecializationId(UUID academicSpecializationId);
+    List<Formation> findByAcademicSpecialization_AcademicSpecializationId(int academicSpecializationId);
 
     List<Formation> findByFormationLevel(int formationLevel);
 

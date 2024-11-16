@@ -7,7 +7,7 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class AcademicSpecializationLocaleResponse {
-    private UUID academicSpecializationId;
+    private int academicSpecializationId;
     private String languageTag;
     private String level;
     private String name;

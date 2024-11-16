@@ -35,25 +35,34 @@ public class CourseInstanceService {
     }
 
     public List<CourseInstanceResponse> getCoursesSmallDetailsInSpecifiedLanguage(String language) {
-//        List<CourseInstance> courseInstances = courseInstanceRepository.findByLanguage(language);
-
-        List<CourseInstance> courseInstances = courseInstanceRepository.findAll();
+        long startTime = System.nanoTime();
+        List<CourseInstance> courseInstances = courseInstanceRepository.findByLanguage(language);
 
         List<CourseInstanceResponse> responseDTOs = new ArrayList<>();
 
         for (CourseInstance courseInstance: courseInstances) {
-            System.out.println(courseInstance.getCourseInstanceId());
             CourseInstanceResponse responseDTO = new CourseInstanceResponse(
                 courseInstance.getCourseInstanceId(),
                 courseInstance.getCourseId(),
-                courseInstanceRepository.findCourseCodeByCourseInstanceIdAndLanguage(courseInstance.getCourseInstanceId(), language),
-                courseInstanceRepository.findCourseNameByCourseInstanceIdAndLanguage(courseInstance.getCourseInstanceId(), language)
+                courseInstanceRepository.findCourseNameByCourseInstanceIdAndLanguage(courseInstance.getCourseId(), language),
+                courseInstanceRepository.findCourseCodeByCourseInstanceIdAndLanguage(courseInstance.getCourseId(), language)
             );
 
             responseDTOs.add(responseDTO);
         }
+        long endTime = System.nanoTime();
+        System.out.println("Time taken: " + (endTime - startTime) + " ns");
 
         return responseDTOs;
+    }
+
+    public List<CourseInstanceResponse> getAllCourseInstancesWithCodeAndLocalizedName(String language)
+    {
+        long startTime = System.nanoTime();
+        List <CourseInstanceResponse> courseInstances = courseInstanceRepository.getAllCourseInstancesWithCodeAndLocalizedName(language);
+        long endTime = System.nanoTime();
+        System.out.println("Time taken: " + (endTime - startTime) + " ns");
+        return courseInstances;
     }
 }
  

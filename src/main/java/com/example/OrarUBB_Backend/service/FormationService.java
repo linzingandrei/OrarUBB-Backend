@@ -20,11 +20,11 @@ public class FormationService {
         this.academicSpecializationService = academicSpecializationService;
     }
 
-    public List<Formation> getAllFormationsForAcademicSpecialization(UUID academicSpecializationId) {
+    public List<Formation> getAllFormationsForAcademicSpecialization(int academicSpecializationId) {
         return formationRepository.findByAcademicSpecialization_AcademicSpecializationId(academicSpecializationId);
     }
 
-    public List<GroupResponse> getAllGroupsForAcademicSpecializationAndYear(UUID academicSpecializationId, int year) {
+    public List<GroupResponse> getAllGroupsForAcademicSpecializationAndYear(int academicSpecializationId, int year) {
         return getAllFormationsForAcademicSpecialization(academicSpecializationId).stream()
                 .filter(formation -> formation.getYear() == year)
                 .map(formation -> new GroupResponse(formation.getComponents()))

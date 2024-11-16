@@ -3,7 +3,6 @@ package com.example.OrarUBB_Backend.controller;
 import java.util.List;
 import java.util.Set;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,7 +13,7 @@ import com.example.OrarUBB_Backend.dto.CourseInstanceResponse;
 import com.example.OrarUBB_Backend.service.CourseInstanceService;
 
 @RestController
-@RequestMapping("/course_instances")
+@RequestMapping("/course-instances")
 public class CourseInstanceController {
     private final CourseInstanceService courseInstanceService;
 
@@ -23,14 +22,12 @@ public class CourseInstanceController {
     }
 
     @GetMapping("/{language}")
-    public ResponseEntity<List<CourseInstanceResponse>> getCourseFewDetailsInSpecifiedLanguage(
-            // BROKEN
-        @PathVariable("language") String language) {
-        
+    public ResponseEntity<List<CourseInstanceResponse>> getAllCourseInstancesWithCodeAndLocalizedName(@PathVariable("language") String language) {
+
         Set<String> validLanguages = Set.of("ro-RO", "en-GB", "de-DE", "hu-HU");
-        
+
         if (validLanguages.contains(language)) {
-            List<CourseInstanceResponse> classes = courseInstanceService.getCoursesSmallDetailsInSpecifiedLanguage(language);
+            List<CourseInstanceResponse> classes = courseInstanceService.getAllCourseInstancesWithCodeAndLocalizedName(language);
             return ResponseEntity.ok(classes);
         }
 

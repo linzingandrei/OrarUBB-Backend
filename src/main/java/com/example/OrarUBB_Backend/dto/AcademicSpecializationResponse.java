@@ -9,7 +9,7 @@ import java.util.Set;
 @Data
 @AllArgsConstructor
 public class AcademicSpecializationResponse {
-    private UUID academicSpecializationId;
+    private int academicSpecializationId;
     private String internalName;
     private Set<AcademicSpecializationLocaleResponse> locales;
 }

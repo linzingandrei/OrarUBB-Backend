@@ -1,6 +1,7 @@
 package com.example.OrarUBB_Backend.repository;
 
 import com.example.OrarUBB_Backend.domain.CourseInstance;
+import com.example.OrarUBB_Backend.dto.CourseInstanceResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -22,12 +23,17 @@ public interface CourseInstanceRepository extends JpaRepository<CourseInstance, 
     // Custom query to find all instances by courseCodeNameId
     List<CourseInstance> findAllByCourseCodeName_CourseCodeNameId(int courseCodeNameId);
 
-//    @Query("SELECT c FROM CourseCodeNameLocale c WHERE c.languageTag = :languageTag")
-//    public List<CourseInstance> findByLanguage(@Param("languageTag") String language);
+    @Query("SELECT c FROM CourseCodeNameLocale c WHERE c.languageTag = :languageTag")
+    public List<CourseInstance> findByLanguage(@Param("languageTag") String language);
 
     @Query("SELECT c.courseNameLocale FROM CourseCodeNameLocale c WHERE c.courseCodeNameId = :courseInstanceId AND c.languageTag = :languageTag")
-    public String findCourseNameByCourseInstanceIdAndLanguage(@Param("courseInstanceId") UUID courseInstanceId, @Param("languageTag") String language);
+    public String findCourseNameByCourseInstanceIdAndLanguage(@Param("courseInstanceId") int courseInstanceId, @Param("languageTag") String language);
 
     @Query("SELECT c.courseNameAbbreviationLocale FROM CourseCodeNameLocale c WHERE c.courseCodeNameId = :courseInstanceId AND c.languageTag = :languageTag")
-    public String findCourseCodeByCourseInstanceIdAndLanguage(@Param("courseInstanceId") UUID courseInstanceId, @Param("languageTag") String language);
+    public String findCourseCodeByCourseInstanceIdAndLanguage(@Param("courseInstanceId") int courseInstanceId, @Param("languageTag") String language);
+
+    @Query("SELECT new com.example.OrarUBB_Backend.dto.CourseInstanceResponse(ci.courseInstanceId, ccnl.courseCodeNameId, ccnl.courseNameLocale, ci.courseCode)" +
+            "FROM CourseCodeNameLocale ccnl JOIN CourseInstance ci ON ccnl.courseCodeNameId = ci.courseId " +
+            "WHERE ccnl.languageTag = 'ro-RO'")
+    public List<CourseInstanceResponse> getAllCourseInstancesWithCodeAndLocalizedName(@Param("languageTag") String language);
 }

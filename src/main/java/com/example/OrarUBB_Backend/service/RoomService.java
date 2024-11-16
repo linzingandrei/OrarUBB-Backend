@@ -22,7 +22,7 @@ public class RoomService {
         return roomRepository.findAll();
     }
 
-    public Optional<Room> getRoomById(UUID roomId) {
+    public Optional<Room> getRoomById(int roomId) {
         return roomRepository.findById(roomId);
     }
 }
