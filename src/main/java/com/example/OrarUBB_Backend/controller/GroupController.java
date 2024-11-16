@@ -8,9 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.List;
-import java.util.UUID;
-
 @RestController
 @RequestMapping("/groups")
 public class GroupController {
@@ -21,8 +18,13 @@ public class GroupController {
         this.formationService = formationService;
     }
 
-    @GetMapping("/:academicSpecializationId/:year")
-    public List<GroupResponse> getAllGroupsForAcademicSpecializationForYear(@PathVariable int academicSpecializationId, @PathVariable int year) {
-        return formationService.getAllGroupsForAcademicSpecializationAndYear(academicSpecializationId, year);
+    @GetMapping("/id/{academicSpecializationId}/{year}")
+    public GroupResponse getAllGroupsWithAcademicSpecializationIdAndYear(@PathVariable int academicSpecializationId, @PathVariable int year) {
+        return formationService.getAllGroupsWithAcademicSpecializationIdAndYear(academicSpecializationId, year);
+    }
+
+    @GetMapping("/{yearCode}")
+    public GroupResponse getAllGroupsWithYearCode(@PathVariable String yearCode) {
+        return formationService.getAllGroupsWithYearCode(yearCode);
     }
 }

@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class FormationService {
@@ -24,10 +23,13 @@ public class FormationService {
         return formationRepository.findByAcademicSpecialization_AcademicSpecializationId(academicSpecializationId);
     }
 
-    public List<GroupResponse> getAllGroupsForAcademicSpecializationAndYear(int academicSpecializationId, int year) {
-        return getAllFormationsForAcademicSpecialization(academicSpecializationId).stream()
-                .filter(formation -> formation.getYear() == year)
-                .map(formation -> new GroupResponse(formation.getComponents()))
-                .toList();
+    public GroupResponse getAllGroupsWithAcademicSpecializationIdAndYear(int academicSpecializationId, int year) {
+        return new GroupResponse(formationRepository.getAllGroupsForSpecializationInAYear(academicSpecializationId, year));
+    }
+
+    public GroupResponse getAllGroupsWithYearCode(String year_code)
+    {
+
+        return new GroupResponse(formationRepository.getAllGroupsWithYearCode(year_code));
     }
 }
