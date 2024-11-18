@@ -30,7 +30,4 @@ public class Teacher {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "academic_rank_id")
     private AcademicRank academicRank;
-
-
-
 }

@@ -27,21 +27,24 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, UU
     @Query("SELECT f.code FROM Formation f WHERE f.formationId = :formationId")
     public String findFormationCodeByFormationId(@Param("formationId") UUID formationId);
 
-    // @Query("SELECT ci" + 
-        // "FROM ClassInstance ci join ci.courseInstance c" +
-                              // "join ci.dayDefinitionLocale d" +
-        // "where c.course_code = :courseCode and d.languageTag = :languageTag"
-    // )
-    // public ClassInstance findByLanguageAndCourseCode(@Param("courseCode") String courseCode, @Param("languageTag") String language);
-
     @Query("SELECT ci " +
            "FROM ClassInstance ci join ci.courseInstance c " +
            "WHERE c.courseCode = :courseCode ")
     public List<ClassInstance> findByCourseCode(@Param("courseCode") String courseCode);
+
+    @Query("SELECT ci " +
+            "FROM ClassInstance ci " +
+            "WHERE ci.formation.code = :groupCode")
+    public List<ClassInstance> findByGroupCode(@Param("groupCode") String groupCode);
 
     @Query("SELECT c.classTypeLocale FROM ClassTypeLocale c WHERE c.classTypeId = :classTypeId AND c.languageTag = :languageTag")
     public String findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(@Param("classTypeId") int classTypeId, @Param("languageTag") String language);
 
     @Query("SELECT c.courseCode FROM CourseInstance c WHERE c.courseInstanceId = :courseInstanceId")
     public String findCourseInstanceCodeInCourseInstanceByCourseInstanceId(@Param("courseInstanceId") UUID courseInstanceId);
+
+    @Query("SELECT ccnl.courseCodeName.courseName " +
+            "FROM CourseInstance ci INNER JOIN CourseCodeName ccn on ci.courseId = ccn.courseCodeNameId inner join CourseCodeNameLocale ccnl on ccn.courseCodeNameId = ccnl.courseCodeNameId " +
+            "WHERE ci.courseInstanceId = :courseCodeNameId AND ccnl.languageTag = :languageTag")
+    public String findCourseNameByCourseInstanceIdAndLanguage(@Param("courseCodeNameId") UUID courseCodeNameId, @Param("languageTag") String language);
 }

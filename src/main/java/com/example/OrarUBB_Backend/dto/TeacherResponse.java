@@ -12,5 +12,6 @@ public class TeacherResponse {
     private UUID teacherId;
     @Getter
     private String name;
+    private String codeName;
 
 }
