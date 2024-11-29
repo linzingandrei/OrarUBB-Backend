@@ -53,7 +53,7 @@ public class AcademicSpecializationService {
                 .collect(Collectors.toList());
     }
 
-    public AcademicSpecializationResponse getAcademicSpecializationById(UUID academicSpecializationId) {
+    public AcademicSpecializationResponse getAcademicSpecializationById(Integer academicSpecializationId) {
         return convertToResponse(academicSpecializationRepository.findById(academicSpecializationId).orElseThrow());
     }
 

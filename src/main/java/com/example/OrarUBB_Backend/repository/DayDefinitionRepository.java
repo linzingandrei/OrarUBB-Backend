@@ -8,7 +8,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface DayDefinitionRepository extends JpaRepository<DayDefinition, UUID> {
+public interface DayDefinitionRepository extends JpaRepository<DayDefinition, Integer> {
 
     // Custom query method to find a DayDefinition by dayName
     Optional<DayDefinition> findByDayName(String dayName);

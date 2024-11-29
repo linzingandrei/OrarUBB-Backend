@@ -24,6 +24,9 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, UU
     @Query("SELECT r.name FROM Room r WHERE r.roomId = :roomId")
     public String findRoomNameByRoomId(@Param("roomId") int roomId);
 
+    @Query("SELECT ci FROM ClassInstance ci WHERE ci.roomId = :roomId")
+    public List<ClassInstance> findByRoomId(@Param("roomId") int roomId);
+
     @Query("SELECT f.code FROM Formation f WHERE f.formationId = :formationId")
     public String findFormationCodeByFormationId(@Param("formationId") UUID formationId);
 

@@ -4,6 +4,8 @@ import com.example.OrarUBB_Backend.domain.DayDefinitionLocale;
 import com.example.OrarUBB_Backend.domain.DayDefinitionLocalePK;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -18,4 +20,7 @@ public interface DayDefinitionLocaleRepository extends JpaRepository<DayDefiniti
 
     // Custom query to find all locales by dayId
     List<DayDefinitionLocale> findAllByDayId(int dayId);
+
+    @Query("SELECT d.dayNameLocale FROM DayDefinitionLocale d WHERE d.languageTag = :language")
+    List<String> findClassDaysByLanguage(@Param("language") String language);
 }
