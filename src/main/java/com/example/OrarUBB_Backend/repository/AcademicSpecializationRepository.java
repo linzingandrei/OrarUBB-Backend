@@ -6,7 +6,7 @@ import java.util.UUID;
 import java.util.List;
 
 @Repository
-public interface AcademicSpecializationRepository extends JpaRepository<AcademicSpecialization, UUID> {
+public interface AcademicSpecializationRepository extends JpaRepository<AcademicSpecialization, Integer> {
 
     List<AcademicSpecialization> findByInternalName(String internalName);
 }

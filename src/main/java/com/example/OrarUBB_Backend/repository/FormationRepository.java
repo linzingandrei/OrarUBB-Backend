@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface FormationRepository extends JpaRepository<Formation, Integer> {
+public interface FormationRepository extends JpaRepository<Formation, UUID> {
 
     List<Formation> findByCode(String code);
 

@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Repository
-public interface CourseInstanceRepository extends JpaRepository<CourseInstance, Integer> {
+public interface CourseInstanceRepository extends JpaRepository<CourseInstance, UUID> {
 
     // Custom query to find a CourseInstance by courseCode
     Optional<CourseInstance> findByCourseCode(String courseCode);
