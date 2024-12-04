@@ -28,15 +28,15 @@ public class ClassInstanceController {
         this.formationService = formationService;
     }
 
-    @GetMapping("/teacher/{teacher_id}/{language}")
+    @GetMapping("/teacher/{teacher_code_name}/{language}")
     public ResponseEntity<List<ClassInstanceResponse>> getClassesForTeacher(
-            @PathVariable("teacher_id") UUID teacherId,
+            @PathVariable("teacher_code_name") String teacherCodeName,
             @PathVariable("language") String language) {
 
         Set<String> validLanguages = Set.of("ro-RO", "en-GB", "de-DE", "hu-HU");
 
         if (validLanguages.contains(language)) {
-            List<ClassInstanceResponse> classes = classInstanceService.getClassesForTeacher(teacherId, language);
+            List<ClassInstanceResponse> classes = classInstanceService.getClassesForTeacher(teacherCodeName, language);
             return ResponseEntity.ok(classes);
         }
 
@@ -78,4 +78,5 @@ public class ClassInstanceController {
 
         return ResponseEntity.badRequest().build();
     }
+
 }

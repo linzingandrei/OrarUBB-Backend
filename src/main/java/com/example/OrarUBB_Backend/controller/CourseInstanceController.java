@@ -33,4 +33,5 @@ public class CourseInstanceController {
 
         return ResponseEntity.badRequest().build();
     }
+
 }
