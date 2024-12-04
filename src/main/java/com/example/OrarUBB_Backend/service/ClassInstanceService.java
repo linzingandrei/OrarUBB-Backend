@@ -42,79 +42,37 @@ public class ClassInstanceService {
     }
 
     public List<ClassInstanceResponse> getClassesForGroup(String groupCode, String language) {
-        List<ClassInstance> classInstances = new ArrayList<>(List.of());
+        List<ClassInstanceResponse> results = new ArrayList<>();
         if (formationService.isYearCode(groupCode)) {
-            List<String> groupsAndSemiGroups = formationService.getGroupsAndSemigroupsForYear(groupCode);
-            for (String group : groupsAndSemiGroups) {
-                List<ClassInstance> groupClassInstances = classInstanceRepository.findByGroupCode(group);
-                classInstances.addAll(groupClassInstances);
-            }
+            List<Object[]> queryResults = classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language);
+            results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
         }
         else if (formationService.isGroupCode(groupCode)) {
             List<String> groupsAndSemiGroups = formationService.getComponentsForGroup(groupCode);
             groupsAndSemiGroups.add(formationService.getYearCodeForGroup(groupCode));
+            List<Object[]> queryResults = new ArrayList<>();
             for (String group : groupsAndSemiGroups) {
-                List<ClassInstance> groupClassInstances = classInstanceRepository.findByGroupCode(group);
-                classInstances.addAll(groupClassInstances);
+                queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language));
             }
+            results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
         }
         else if (formationService.isSubgroupCode(groupCode)) {
             String group = formationService.getGroupForSubgroup(groupCode);
             String year = formationService.getYearCodeForGroup(group);
-            List<ClassInstance> subgroupClassInstances = classInstanceRepository.findByGroupCode(groupCode);
-            List<ClassInstance> groupClassInstances = classInstanceRepository.findByGroupCode(group);
-            List<ClassInstance> yearClassInstances = classInstanceRepository.findByGroupCode(year);
-            classInstances.addAll(subgroupClassInstances);
-            classInstances.addAll(groupClassInstances);
-            classInstances.addAll(yearClassInstances);
+            List<Object[]> queryResults = classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language);
+            queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(group, language));
+            queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(year, language));
+            results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
         }
-        List<ClassInstanceResponse> responseClasses = new ArrayList<>();
-
-        for (ClassInstance classInstance : classInstances) {
-            ClassInstanceResponse classInstanceResponse = new ClassInstanceResponse(
-                    classInstance.getClassId(),
-                    getClassDayLocalized(classInstance.getDayId(), language),
-                    classInstance.getStartHour(),
-                    classInstance.getEndHour(),
-                    classInstance.getFrequency(),
-                    classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
-                    classInstanceRepository.findFormationCodeByFormationId(classInstance.getFormationId()),
-                    classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
-                    classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
-                    classInstanceRepository.findCourseNameByCourseInstanceIdAndLanguage(classInstance.getCourseInstanceId(), language),
-                    teacherService.getTeacherWithLocalizedNameById(classInstance.getTeacherId(), language).getName()
-            );
-            responseClasses.add(classInstanceResponse);
-        }
-
-        return responseClasses;
+        return results;
     }
 
-    public List<ClassInstanceResponse> getClassesForTeacher(UUID teacherId, String language) {
-        List<ClassInstance> classInstances = classInstanceRepository.findByTeacherId(teacherId);
+    public List<ClassInstanceResponse> getClassesForTeacher(String teacherCodeName, String language) {
 
-        List<ClassInstanceResponse> responseDTOs = new ArrayList<>();
+        List<Object[]> results = classInstanceRepository.findClassInstanceByTeacherAndLanguageTag(teacherCodeName, language);
 
-        for (ClassInstance classInstance : classInstances) {
-            ClassInstanceResponse responseDTO = new ClassInstanceResponse(
-                    classInstance.getClassId(),
-                    getClassDayLocalized(classInstance.getDayId(), language),
-                    classInstance.getStartHour(),
-                    classInstance.getEndHour(),
-                    classInstance.getFrequency(),
-                    classInstanceRepository.findRoomNameByRoomId(classInstance.getRoomId()),
 
-                    classInstanceRepository.findFormationCodeByFormationId(classInstance.getFormationId()),
-                    classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
-                    classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
-                    classInstanceRepository.findCourseNameByCourseInstanceIdAndLanguage(classInstance.getCourseInstanceId(), language),
-                    classInstanceRepository.findTeacherNameByTeacherId(classInstance.getTeacherId())
-            );
-
-            responseDTOs.add(responseDTO);
-        }
-
-        return responseDTOs;
+        return mapObjectsToClassInstanceResponse(results);
     }
 
 
@@ -178,5 +136,35 @@ public class ClassInstanceService {
         classInstanceRepository.deleteById(classInstanceId);
 
         log.info("Class instance with id: {} deleted succesfully", classInstanceId);
+    }
+
+    public List<ClassInstanceResponse> mapObjectsToClassInstanceResponse(List<Object[]> results) {
+        List<ClassInstanceResponse> responseDTOs = new ArrayList<>();
+        for (Object[] result : results) {
+            UUID classId = (UUID) result[0];
+            String classDay = (String) result[1];
+            int startHour = (Integer) result[2];
+            int endHour = (Integer) result[3];
+            int frequency = (Integer) result[4];
+            String room = (String) result[5];
+            String formation = (String) result[6];
+            String classType = (String) result[7];
+            String courseInstanceCode = (String) result[8];
+            String courseInstanceName = (String) result[9];
+            String academicRankAbbreviation = (String) result[10];
+            String firstName = (String) result[11];
+            String surname = (String) result[12];
+
+            // Concatenate academic rank abbreviation, first name, and surname to form teacher
+            String teacher = academicRankAbbreviation + " " + firstName + " " + surname;
+
+            ClassInstanceResponse response = new ClassInstanceResponse(
+                    classId, classDay, startHour, endHour, frequency, room, formation, classType,
+                    courseInstanceCode, courseInstanceName, teacher
+            );
+            responseDTOs.add(response);
+
+        }
+        return responseDTOs;
     }
 }
