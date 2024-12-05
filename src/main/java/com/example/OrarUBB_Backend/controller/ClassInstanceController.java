@@ -62,6 +62,23 @@ public class ClassInstanceController {
         return ResponseEntity.badRequest().build();
     }
 
+    @GetMapping("/room/{room_id}/{language}")
+    public ResponseEntity<List<ClassInstanceResponse>> getClassesForRoom(
+            @PathVariable("room_id") int roomId,
+            @PathVariable("language") String language) {
+
+        System.out.println("Room id: " + roomId);
+        System.out.println("Language: " + language);
+        Set<String> validLanguages = Set.of("ro-RO", "en-GB", "de-DE", "hu-HU");
+
+        if (validLanguages.contains(language)) {
+            List<ClassInstanceResponse> classes = classInstanceService.getClassesForRoom(roomId, language);
+            return ResponseEntity.ok(classes);
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
     @GetMapping("/{course_code}/{language}")
     public ResponseEntity<List<ClassInstanceResponse>> getCourseDetailsForCourseCodeInSpecifiedLanguage(
             @PathVariable("course_code") String courseCode,

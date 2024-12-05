@@ -138,6 +138,8 @@ public class ClassInstanceService {
         log.info("Class instance with id: {} deleted succesfully", classInstanceId);
     }
 
+
+
     public List<ClassInstanceResponse> mapObjectsToClassInstanceResponse(List<Object[]> results) {
         List<ClassInstanceResponse> responseDTOs = new ArrayList<>();
         for (Object[] result : results) {
