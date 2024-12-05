@@ -48,7 +48,7 @@ public class ClassInstanceController {
             // Should work for the year: /group/IE2/ro-RO and return for IE2, 921..927, 921/1, 921/2, 922/1, 922/2 etc
             // For the group: /group/925/ro-RO and return for IE2, 925/1, 925/2, 925
             // For the subgroup: /group/925-1/ro-RO and return for IE2, 925/1, 925
-            // TODO: EXTREMELY inefficient
+            // Thanks to Horatiu, now it's extremely efficient :)
             @PathVariable("group_code") String groupCode,
             @PathVariable("language") String language) {
 
@@ -56,6 +56,29 @@ public class ClassInstanceController {
         groupCode = groupCode.replace("-", "/");
         if (validLanguages.contains(language)) {
             List<ClassInstanceResponse> classes = classInstanceService.getClassesForGroup(groupCode, language);
+            return ResponseEntity.ok(classes);
+        }
+
+        return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping("/room/{roomName}/{language}")
+    public ResponseEntity<List<ClassInstanceResponse>> getClassesForRoom(
+            @PathVariable("roomName") String roomName,
+            @PathVariable("language") String language) {
+
+        Set<String> validLanguages = Set.of("ro-RO", "en-GB", "de-DE", "hu-HU");
+
+        if (roomName.contains("-")) {
+            switch (roomName)
+            {
+                case "2-I", "5-I", "6-II", "7-I", "9-I" -> roomName = roomName.replace("-", "/");
+                default -> {}
+            }
+        }
+
+        if (validLanguages.contains(language)) {
+            List<ClassInstanceResponse> classes = classInstanceService.getClassesForRoom(roomName, language);
             return ResponseEntity.ok(classes);
         }
 

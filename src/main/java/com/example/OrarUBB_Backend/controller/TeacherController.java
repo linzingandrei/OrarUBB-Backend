@@ -18,8 +18,6 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
 
-
-    @CrossOrigin(origins = "http://localhost:5173")
     @GetMapping("/{language}")
     public List<TeacherResponse> getTeachersByLanguage(@PathVariable("language") String language) {
         return teacherService.getTeachersWithLocalizedNames(language);

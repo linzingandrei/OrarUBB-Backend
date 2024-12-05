@@ -102,6 +102,11 @@ public class ClassInstanceService {
         return responseDTOs;
     }
 
+    public List<ClassInstanceResponse> getClassesForRoom(String roomName, String language) {
+        List<Object[]> queryResults = classInstanceRepository.findClassInstancesByRoomNameAndLanguageTag(roomName, language);
+        return this.mapObjectsToClassInstanceResponse(queryResults);
+    }
+
     public List<ClassInstance> getAllClassInstances() {
         return classInstanceRepository.findAll();
     }
@@ -137,6 +142,8 @@ public class ClassInstanceService {
 
         log.info("Class instance with id: {} deleted succesfully", classInstanceId);
     }
+
+
 
     public List<ClassInstanceResponse> mapObjectsToClassInstanceResponse(List<Object[]> results) {
         List<ClassInstanceResponse> responseDTOs = new ArrayList<>();

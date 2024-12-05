@@ -12,4 +12,5 @@ public class AcademicSpecializationLocaleResponse {
     private String level;
     private String name;
     private String nameAbbreviated;
+    private String years;
 }
