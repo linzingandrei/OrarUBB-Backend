@@ -15,4 +15,6 @@ public interface AcademicSpecializationLocaleRepository
     List<AcademicSpecializationLocale> findByName(String name);
 
     List<AcademicSpecializationLocale> findByNameAbbreviated(String nameAbbreviated);
+
+    List<AcademicSpecializationLocale> findByLevelAndLanguageTag(String level, String languageTag);
 }

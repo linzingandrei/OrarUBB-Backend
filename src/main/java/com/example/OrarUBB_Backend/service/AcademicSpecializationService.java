@@ -9,7 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -43,7 +45,8 @@ public class AcademicSpecializationService {
                 academicSpecializationLocale.getLanguageTag(),
                 academicSpecializationLocale.getLevel(),
                 academicSpecializationLocale.getName(),
-                academicSpecializationLocale.getNameAbbreviated()
+                academicSpecializationLocale.getNameAbbreviated(),
+                "1;"
         );
     }
 
@@ -58,10 +61,24 @@ public class AcademicSpecializationService {
     }
 
     public List<AcademicSpecializationLocaleResponse> getAllAcademicSpecializationsForLevelAndLanguage(String level, String language) {
-        return academicSpecializationLocaleRepository.findAll().stream()
-                .filter(academicSpecializationLocale -> academicSpecializationLocale.getLevel().equals(level) &&
-                        academicSpecializationLocale.getLanguageTag().equals(language))
-                .map(this::convertLocaleToResponse)
-                .toList();
+        // Fetch raw data from repository
+        List<Object[]> results = academicSpecializationRepository.findSpecializationsWithFormationCount(level, language);
+        List<AcademicSpecializationLocaleResponse> response = new ArrayList<>();
+
+        for (Object[] academicSpecialization : results) {
+            StringBuilder years = new StringBuilder();
+            for (int i = 1; i <= (long) academicSpecialization[3]; i++) {
+                years.append(i).append(";");
+            }
+            response.add(new AcademicSpecializationLocaleResponse(
+                    (Integer) academicSpecialization[0],        // academicSpecializationId
+                    language,                // languageTag (passed to the method)
+                    level,                   // level (passed to the method)
+                    (String) academicSpecialization[1],         // internalName
+                    (String) academicSpecialization[2],                      // nameAbbreviated (not provided, can be added later)
+                    years.toString()   // formation count as a string
+            ));
+        }
+        return response;
     }
 }

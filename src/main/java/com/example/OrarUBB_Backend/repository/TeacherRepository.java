@@ -23,9 +23,14 @@ public interface TeacherRepository extends JpaRepository<Teacher, UUID> {
     // TODO: create a separate class like 'LocalizedTeacher' with fields: teacherId, localizedName and codeName
     // TODO: after that, this method should return List<LocalizedTeacher>
     @Query("SELECT t.teacherId, arl.academicRankAbbreviationLocaleName, t.firstName, t.surname, t.codeName " +
-            "FROM Teacher t JOIN AcademicRankLocale arl ON t.academicRank.academicRankId = arl.academicRank.academicRankId " +
-            "WHERE arl.academicRankLocaleKey.languageTag = :languageTag")
+            "FROM Teacher t " +
+            "JOIN AcademicRankLocale arl ON t.academicRank.academicRankId = arl.academicRank.academicRankId " +
+            "JOIN ClassInstance ci ON ci.teacherId = t.teacherId " +
+            "WHERE arl.academicRankLocaleKey.languageTag = :languageTag " +
+            "GROUP BY t.teacherId, arl.academicRankAbbreviationLocaleName, t.firstName, t.surname, t.codeName " +
+            "HAVING COUNT(ci.classId) > 0")
     List<List<String>> getAllTeacherRanks_LocalizedNames_CodeNames(String languageTag);
+
 
     // Not really useful unless you use this not localized
     @Query("SELECT t FROM Teacher t JOIN AcademicRankLocale arl ON t.academicRank.academicRankId = arl.academicRank.academicRankId " +

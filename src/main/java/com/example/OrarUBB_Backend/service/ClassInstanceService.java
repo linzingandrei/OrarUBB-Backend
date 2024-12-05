@@ -102,6 +102,11 @@ public class ClassInstanceService {
         return responseDTOs;
     }
 
+    public List<ClassInstanceResponse> getClassesForRoom(String roomName, String language) {
+        List<Object[]> queryResults = classInstanceRepository.findClassInstancesByRoomNameAndLanguageTag(roomName, language);
+        return this.mapObjectsToClassInstanceResponse(queryResults);
+    }
+
     public List<ClassInstance> getAllClassInstances() {
         return classInstanceRepository.findAll();
     }
