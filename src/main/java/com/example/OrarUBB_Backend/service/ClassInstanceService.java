@@ -52,6 +52,7 @@ public class ClassInstanceService {
             groupsAndSemiGroups.add(formationService.getYearCodeForGroup(groupCode));
             List<Object[]> queryResults = new ArrayList<>();
             for (String group : groupsAndSemiGroups) {
+                queryResults = new ArrayList<>();
                 queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language));
             }
             results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));

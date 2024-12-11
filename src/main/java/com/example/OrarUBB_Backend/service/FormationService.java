@@ -27,7 +27,17 @@ public class FormationService {
     }
 
     public GroupResponse getAllGroupsWithAcademicSpecializationIdAndYear(int academicSpecializationId, int year) {
-        return new GroupResponse(formationRepository.getAllGroupsForSpecializationInAYear(academicSpecializationId, year));
+        List<String> formationCodes = formationRepository.getAllGroupsForSpecializationInAYear(academicSpecializationId, year);
+        List<String> result = new ArrayList<>(formationCodes);
+        for(String code : formationCodes) {
+            String components = formationRepository.getComponentsForGroup(code);
+            String[] subgroups = components.split(";");
+            if (subgroups.length >= 2) {
+                result.add(subgroups[0]);
+                result.add(subgroups[1]);
+            }
+        }
+        return new GroupResponse(result);
     }
 
     public GroupResponse getAllGroupsWithYearCode(String year_code) {

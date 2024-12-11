@@ -57,4 +57,5 @@ public interface FormationRepository extends JpaRepository<Formation, UUID> {
 
     @Query("SELECT f.code FROM Formation f WHERE f.code LIKE :code AND f.formationLevel = 3")
     public List<String> getSubgroupCode(String code);
+
 }
