@@ -81,4 +81,8 @@ public class AcademicSpecializationService {
         }
         return response;
     }
+
+    public List<AcademicSpecializationLocale> getAcademicSpecializationWithAbbrev(String abbreviation) {
+        return academicSpecializationLocaleRepository.findByNameAbbreviated(abbreviation);
+    }
 }
