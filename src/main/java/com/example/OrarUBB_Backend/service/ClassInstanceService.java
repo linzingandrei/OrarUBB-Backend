@@ -41,6 +41,33 @@ public class ClassInstanceService {
         return dayLocale != null ? dayLocale.getDayNameLocale() : null;
     }
 
+//    public List<ClassInstanceResponse> getClassesForGroup(String groupCode, String language) {
+//        List<ClassInstanceResponse> results = new ArrayList<>();
+//        if (formationService.isYearCode(groupCode)) {
+//            List<Object[]> queryResults = classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language);
+//            results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
+//        }
+//        else if (formationService.isGroupCode(groupCode)) {
+//            List<String> groupsAndSemiGroups = formationService.getComponentsForGroup(groupCode);
+//            groupsAndSemiGroups.add(formationService.getYearCodeForGroup(groupCode));
+//            List<Object[]> queryResults = new ArrayList<>();
+//            for (String group : groupsAndSemiGroups) {
+//                queryResults = new ArrayList<>();
+//                queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language));
+//            }
+//            results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
+//        }
+//        else if (formationService.isSubgroupCode(groupCode)) {
+//            String group = formationService.getGroupForSubgroup(groupCode);
+//            String year = formationService.getYearCodeForGroup(group);
+//            List<Object[]> queryResults = classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language);
+//            queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(group, language));
+//            queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(year, language));
+//            results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
+//        }
+//        return results;
+//    }
+
     public List<ClassInstanceResponse> getClassesForGroup(String groupCode, String language) {
         List<ClassInstanceResponse> results = new ArrayList<>();
         if (formationService.isYearCode(groupCode)) {
@@ -51,11 +78,12 @@ public class ClassInstanceService {
             List<String> groupsAndSemiGroups = formationService.getComponentsForGroup(groupCode);
             groupsAndSemiGroups.add(formationService.getYearCodeForGroup(groupCode));
             List<Object[]> queryResults = new ArrayList<>();
-            for (String group : groupsAndSemiGroups) {
+            for (String group : groupsAndSemiGroups) { //year + group + subgroups
                 queryResults = new ArrayList<>();
-                queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language));
+                queryResults.addAll(classInstanceRepository.findClassInstancesByGroupAndLanguageTag(group, language));
+                results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
             }
-            results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
+            //results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
         }
         else if (formationService.isSubgroupCode(groupCode)) {
             String group = formationService.getGroupForSubgroup(groupCode);
