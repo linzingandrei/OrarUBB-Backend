@@ -12,7 +12,7 @@ public class ClassInstanceResponse {
     private final String classDay; // c
     private final int startHour; // direct din class_instance
     private final int endHour; // direct din class_instance
-    private final int frequency; // direct din class instance
+    private final int frequency; // 0 fiecare saptamana, 1 saptamana impara, 2 saptamana para
     private final String room;
     private final String formation;
     private final String classType;
