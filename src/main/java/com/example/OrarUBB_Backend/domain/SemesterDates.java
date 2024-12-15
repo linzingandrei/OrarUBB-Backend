@@ -1,5 +1,6 @@
 package com.example.OrarUBB_Backend.domain;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -60,16 +61,18 @@ public class SemesterDates {
         int weekIndex = 0;
 
         while (!currentDate.isAfter(date)) {
-            if (!isHoliday(currentDate)) {
+            if (!isHoliday(currentDate) && currentDate.getDayOfWeek() == DayOfWeek.MONDAY) {
                 weekIndex++;
             }
             currentDate = currentDate.plusDays(1);
         }
-        return weekIndex / 7 + 1; // Divide by 7 for weeks
+
+        return weekIndex;
     }
 
     public static boolean isOddWeek(LocalDate date) {
-        return getEffectiveWeekIndex(date) % 2 != 0;
+        int effectiveWeekIndex = getEffectiveWeekIndex(date);
+        return effectiveWeekIndex % 2 != 0;
     }
 
     private static class Holiday {

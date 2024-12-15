@@ -10,8 +10,6 @@ import net.fortuna.ical4j.model.property.*;
 import net.fortuna.ical4j.model.property.immutable.ImmutableCalScale;
 import net.fortuna.ical4j.model.property.immutable.ImmutableVersion;
 import org.springframework.stereotype.Service;
-import net.fortuna.ical4j.model.property.CalScale;
-import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.data.CalendarOutputter;
 
 import java.io.FileOutputStream;
@@ -20,8 +18,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Service
@@ -31,20 +27,6 @@ public class ICalendarService {
 
     public ICalendarService(ClassInstanceService classInstanceService) {
         this.classInstanceService = classInstanceService;
-
-        if (this.classInstanceService != null) {
-            try {
-                // Generate a test calendar and save it to a file
-                Calendar testCalendar = generateCalendarForGroup("925", "ro-RO");
-                if (testCalendar != null) {
-                    saveCalendarToFile(testCalendar, "test_schedule.ics");
-                }
-            } catch (Exception e) {
-                e.printStackTrace(); // Log the exception for debugging
-            }
-        } else {
-            System.out.println("classInstanceService is not initialized. Skipping test calendar generation.");
-        }
     }
 
     private DayOfWeek mapRomanianDayToDayOfWeek(String dayOfWeek) {
@@ -64,15 +46,24 @@ public class ICalendarService {
         }
     }
 
-    private LocalDate findNextClassDate(LocalDate start, String dayOfWeek) {
+    private LocalDate findNextClassDate(LocalDate start, String dayOfWeek, int frequency) {
         DayOfWeek targetDay = mapRomanianDayToDayOfWeek(dayOfWeek);
         LocalDate nextDate = start;
+        boolean isOddWeek = SemesterDates.isOddWeek(start);
 
-        while (nextDate.getDayOfWeek() != targetDay) {
+        while (true) {
+            if (nextDate.getDayOfWeek() == targetDay && !SemesterDates.isHoliday(nextDate)) {
+                if (frequency == 0 || (frequency == 1 && isOddWeek) || (frequency == 2 && !isOddWeek)) {
+                    break;
+                }
+            }
+
             nextDate = nextDate.plusDays(1);
-        }
 
-        nextDate = SemesterDates.adjustForHolidays(nextDate);
+            if (!SemesterDates.isHoliday(nextDate) && nextDate.getDayOfWeek() == DayOfWeek.MONDAY) {
+                isOddWeek = SemesterDates.isOddWeek(nextDate);
+            }
+        }
 
         return nextDate;
     }
@@ -102,19 +93,12 @@ public class ICalendarService {
     }
 
     private VEvent createEventFromClassInstance(ClassInstanceResponse classInstance) {
-        // Define the time zone
         TimeZoneRegistry registry = TimeZoneRegistryFactory.getInstance().createRegistry();
-        TimeZone timezone = registry.getTimeZone("Europe/Bucharest"); // UBB timezone
+        TimeZone timezone = registry.getTimeZone("Europe/Bucharest");
         VTimeZone tz = timezone.getVTimeZone();
 
-        LocalDate currentDate = findNextClassDate(SemesterDates.SEMESTER_START, classInstance.getClassDay());
+        LocalDate currentDate = findNextClassDate(SemesterDates.SEMESTER_START, classInstance.getClassDay(), classInstance.getFrequency());
 
-        // Adjust start date for even weeks
-        if (classInstance.getFrequency() == 2) { // Even weeks
-            currentDate = currentDate.plusWeeks(1);
-        }
-
-        // Create ZonedDateTime objects for start and end
         ZonedDateTime startDateTime = currentDate
                 .atTime(classInstance.getStartHour(), 0)
                 .atZone(ZoneId.of("Europe/Bucharest"));
@@ -123,16 +107,15 @@ public class ICalendarService {
                 .atTime(classInstance.getEndHour(), 0)
                 .atZone(ZoneId.of("Europe/Bucharest"));
 
-        // Create the VEvent using ZonedDateTime
         VEvent event = new VEvent(startDateTime, endDateTime, classInstance.getCourseInstanceName());
 
-        // Add recurrence rules based on frequency
         String recurrenceRule = generateRecurrenceRule(classInstance.getFrequency());
         if (recurrenceRule != null) {
             event.add(new RRule(recurrenceRule));
         }
 
-        // Add other event properties
+        addExclusionDates(event);
+
         event.add(new Location(classInstance.getRoom()));
         event.add(new Description(
                 String.format("Formation: %s\nType: %s\nTeacher: %s",
@@ -150,19 +133,21 @@ public class ICalendarService {
         LocalDate endDate = SemesterDates.SEMESTER_END;
 
         switch (frequency) {
-            case 0: // Every week
+            case 0:
                 return String.format("FREQ=%s;UNTIL=%s", frequencyType, endDate.toString().replace("-", ""));
-            case 1: // Odd weeks
+            case 1:
                 return String.format("FREQ=%s;INTERVAL=2;UNTIL=%s;WKST=MO", frequencyType, endDate.toString().replace("-", ""));
-            case 2: // Even weeks
+            case 2:
                 return String.format("FREQ=%s;INTERVAL=2;UNTIL=%s;WKST=MO", frequencyType, endDate.toString().replace("-", ""));
             default:
                 return null;
         }
     }
 
-    private DateTime convertToDateTime(LocalDate date, int hour) {
-        return new DateTime(Date.from(date.atTime(hour, 0).atZone(ZoneId.systemDefault()).toInstant()));
+    private void addExclusionDates(VEvent event) {
+        for (LocalDate holiday : SemesterDates.getAllHolidayDates()) {
+            DateTime holidayDate = new DateTime(Date.from(holiday.atStartOfDay(ZoneId.of("Europe/Bucharest")).toInstant()));
+            event.add(new ExDate(String.valueOf(holidayDate)));
+        }
     }
-
 }
