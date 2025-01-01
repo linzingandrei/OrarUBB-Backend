@@ -118,11 +118,13 @@ public class ScheduleService {
     }
 
     public boolean deleteASpecificScheduleForCurrentUser(int scheduleId, String userId) {
+        System.out.println(scheduleId);
         Optional<Schedule> schedule = this.scheduleRepository.findById(scheduleId);
 
         if (schedule.isPresent()) {
             if (schedule.get().getUserId().equals(userId)) {
                 this.scheduleRepository.deleteById(scheduleId);
+                this.scheduleRepository.flush();
                 return true;
             }
             return false;

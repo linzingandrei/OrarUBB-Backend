@@ -74,6 +74,9 @@ public class ScheduleController {
         if (isDeleted) {
             // System.out.println("A AJUNS");
             List<ScheduleResponse> updatedScheduleList = scheduleService.getAllSchedulesForCertainUser(userId);
+            for (ScheduleResponse scheduleResponse: updatedScheduleList) {
+                System.out.println(scheduleResponse.toString());
+            }
             return ResponseEntity.ok(updatedScheduleList);
         } else {
             return ResponseEntity.status(404).body(null);
