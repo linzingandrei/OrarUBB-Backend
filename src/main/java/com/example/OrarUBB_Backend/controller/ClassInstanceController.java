@@ -1,6 +1,7 @@
 package com.example.OrarUBB_Backend.controller;
 
 import com.example.OrarUBB_Backend.service.FormationService;
+import com.example.OrarUBB_Backend.service.UserClassRelationService;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.OrarUBB_Backend.dto.ClassInstanceResponse;
@@ -20,12 +21,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/classes")
 public class ClassInstanceController {
     private final ClassInstanceService classInstanceService;
+    private final UserClassRelationService userClassRelationService;
 
     private final FormationService formationService;
 
-    public ClassInstanceController(ClassInstanceService classInstanceService, FormationService formationService) {
+    public ClassInstanceController(ClassInstanceService classInstanceService, FormationService formationService, UserClassRelationService userClassRelationService) {
         this.classInstanceService = classInstanceService;
         this.formationService = formationService;
+        this.userClassRelationService = userClassRelationService;
     }
 
     @GetMapping("/teacher/{teacher_code_name}/{language}")
@@ -101,5 +104,7 @@ public class ClassInstanceController {
 
         return ResponseEntity.badRequest().build();
     }
+
+
 
 }

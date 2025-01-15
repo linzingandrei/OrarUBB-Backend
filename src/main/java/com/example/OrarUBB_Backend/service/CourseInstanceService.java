@@ -19,6 +19,7 @@ public class CourseInstanceService {
         this.courseInstanceRepository = courseInstanceRepository;
     }
 
+
     // Method to get a CourseInstance by courseCode
     public Optional<CourseInstance> getCourseInstanceByCourseCode(String courseCode) {
         return courseInstanceRepository.findByCourseCode(courseCode);
