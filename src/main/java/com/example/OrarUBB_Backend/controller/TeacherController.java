@@ -32,4 +32,5 @@ public class TeacherController {
     public TeacherResponse getTeacherByCodeName(@PathVariable("teacher_code_name") String codeName, @PathVariable("language") String language) {
         return teacherService.getTeacherWithLocalizedNameByCodeName(codeName, language);
     }
+
 }

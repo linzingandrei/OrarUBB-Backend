@@ -19,6 +19,7 @@ public class ClassInstanceResponse {
     private final String courseInstanceCode;
     private final String courseInstanceName;
     private final String teacher;
+    private final String teacherCode;
 }
 /*
 course instance code + name => course_instance_id => course_instance_table => courese_code_name => course_code-Name_locale + limba(ro-RO)

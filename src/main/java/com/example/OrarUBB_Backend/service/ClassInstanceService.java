@@ -122,7 +122,8 @@ public class ClassInstanceService {
                     classInstanceRepository.findClassTypeInClassTypeLocaleByClassTypeIdAndLanguage(classInstance.getClassTypeId(), language),
                     classInstanceRepository.findCourseInstanceCodeInCourseInstanceByCourseInstanceId(classInstance.getCourseInstanceId()),
                     classInstanceRepository.findCourseNameByCourseInstanceIdAndLanguage(classInstance.getCourseInstanceId(), language),
-                    teacherService.getTeacherWithLocalizedNameById(classInstance.getTeacherId(), language).getName()
+                    teacherService.getTeacherWithLocalizedNameById(classInstance.getTeacherId(), language).getName(),
+                    teacherService.getTeacherWithLocalizedNameById(classInstance.getTeacherId(), language).getCodeName()
             );
 
             responseDTOs.add(responseDTO);
@@ -190,13 +191,14 @@ public class ClassInstanceService {
             String academicRankAbbreviation = (String) result[10];
             String firstName = (String) result[11];
             String surname = (String) result[12];
+            String teacherCode = (String) result[13];
 
             // Concatenate academic rank abbreviation, first name, and surname to form teacher
             String teacher = academicRankAbbreviation + " " + firstName + " " + surname;
 
             ClassInstanceResponse response = new ClassInstanceResponse(
                     classId, classDay, startHour, endHour, frequency, room, formation, classType,
-                    courseInstanceCode, courseInstanceName, teacher
+                    courseInstanceCode, courseInstanceName, teacher,teacherCode
             );
             responseDTOs.add(response);
 
