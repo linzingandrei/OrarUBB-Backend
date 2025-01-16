@@ -61,6 +61,15 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, UU
 
     @Query("SELECT cls_i.classId, day_def_loc.dayNameLocale, cls_i.startHour, cls_i.endHour, cls_i.frequency, r.name,f.code,cls_type_loc.classTypeLocale,crs_i.courseCode, " +
             "crs_loc.courseNameLocale,ac_r_loc.academicRankAbbreviationLocaleName,t.firstName,t.surname " +
+            "FROM ClassInstance cls_i JOIN Formation f ON cls_i.classId = :classId AND cls_i.formationId = f.formationId JOIN ClassTypeLocale cls_type_loc ON cls_i.classTypeId = cls_type_loc.classTypeId AND cls_type_loc.languageTag = :languageTag " +
+            "JOIN Room r ON cls_i.roomId = r.roomId JOIN Teacher t ON cls_i.teacherId = t.teacherId JOIN AcademicRankLocale ac_r_loc ON t.academicRank.academicRankId = ac_r_loc.academicRank.academicRankId AND ac_r_loc.academicRankLocaleKey.languageTag = :languageTag " +
+            "JOIN DayDefinitionLocale day_def_loc ON day_def_loc.dayDefinition.dayId = cls_i.dayId AND day_def_loc.languageTag = :languageTag " +
+            "JOIN CourseInstance crs_i ON cls_i.courseInstanceId = crs_i.courseInstanceId JOIN CourseCodeNameLocale crs_loc ON crs_loc.courseCodeNameId = crs_i.courseId AND crs_loc.languageTag = :languageTag " +
+            "ORDER BY day_def_loc.dayDefinition.dayId, cls_i.startHour ASC")
+    public List<Object[]> findClassInstanceByClassId(UUID classId, @Param("languageTag") String languageTag);
+
+    @Query("SELECT cls_i.classId, day_def_loc.dayNameLocale, cls_i.startHour, cls_i.endHour, cls_i.frequency, r.name,f.code,cls_type_loc.classTypeLocale,crs_i.courseCode, " +
+            "crs_loc.courseNameLocale,ac_r_loc.academicRankAbbreviationLocaleName,t.firstName,t.surname " +
             "FROM ClassInstance cls_i JOIN Formation f ON cls_i.formationId = f.formationId  JOIN ClassTypeLocale cls_type_loc ON cls_i.classTypeId = cls_type_loc.classTypeId AND cls_type_loc.languageTag = :languageTag " +
             "JOIN Room r ON cls_i.roomId = r.roomId and r.name = :roomName JOIN Teacher t ON cls_i.teacherId = t.teacherId JOIN AcademicRankLocale ac_r_loc ON t.academicRank.academicRankId = ac_r_loc.academicRank.academicRankId AND ac_r_loc.academicRankLocaleKey.languageTag = :languageTag " +
             "JOIN DayDefinitionLocale day_def_loc ON day_def_loc.dayDefinition.dayId = cls_i.dayId AND day_def_loc.languageTag = :languageTag " +
@@ -77,6 +86,6 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, UU
             "ORDER BY day_def_loc.dayDefinition.dayId, cls_i.startHour ASC")
     public List<Object[]> findClassInstanceByTeacherAndLanguageTag(@Param("teacher_code_name") String teacher_code_name, @Param("languageTag") String languageTag);
 
-
+//    public void
 
 }
