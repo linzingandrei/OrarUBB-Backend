@@ -22,6 +22,9 @@ public class ClassInstance {
     @Column(name = "class_id")
     private UUID classId;
 
+    @Column(name = "class_day_id", insertable=false, updatable=false)
+    private int dayId;
+
     @ManyToOne
     @JoinColumn(
         name = "class_day_id",
@@ -38,12 +41,18 @@ public class ClassInstance {
     @Column(name = "frequency", nullable = false)
     private int frequency;
 
+    @Column(name = "room_id", insertable=false, updatable=false)
+    private int roomId;
+
     @ManyToOne
     @JoinColumn(
         name = "room_id",
         referencedColumnName = "room_id"
     )
     private Room room;
+
+    @Column(name = "formation_id", insertable=false, updatable=false)
+    private UUID formationId;
 
     @ManyToOne
     @JoinColumn(
@@ -52,6 +61,9 @@ public class ClassInstance {
     )
     private Formation formation;
 
+    @Column(name = "class_type_id", insertable = false, updatable = false)
+    private int classTypeId;
+
     @ManyToOne
     @JoinColumn(
         name = "class_type_id",
@@ -59,12 +71,18 @@ public class ClassInstance {
     )
     private ClassType classType;
 
+    @Column(name = "course_instance_id", insertable = false, updatable = false)
+    private UUID courseInstanceId;
+
     @ManyToOne
     @JoinColumn(
         name = "course_instance_id",
         referencedColumnName = "course_instance_id"
     )
     private CourseInstance courseInstance;
+
+    @Column(name = "teacher_id", insertable = false, updatable = false)
+    private UUID teacherId;
 
     @ManyToOne
     @JoinColumn(

@@ -8,7 +8,8 @@ import java.util.UUID;
 @Data
 @AllArgsConstructor
 public class CourseInstanceResponse {
-    private UUID courseInstanceId;
-    private String courseName;
-    private String courseCode;
+    private final UUID courseInstanceId;
+    private final int courseId;
+    private final String courseName;
+    private final String courseCode;
 }

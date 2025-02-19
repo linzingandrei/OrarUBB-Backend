@@ -1,41 +1,24 @@
 package com.example.OrarUBB_Backend.service;
 
-import com.example.OrarUBB_Backend.domain.AcademicRankLocale;
 import com.example.OrarUBB_Backend.domain.Teacher;
 import com.example.OrarUBB_Backend.dto.TeacherResponse;
-import com.example.OrarUBB_Backend.repository.AcademicRankLocaleRepository;
-import com.example.OrarUBB_Backend.repository.AcademicRankRepository;
 import com.example.OrarUBB_Backend.repository.TeacherRepository;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class TeacherService {
     private final TeacherRepository teacherRepository;
-    private final AcademicRankLocaleRepository academicRankLocaleRepository;
-    private final AcademicRankRepository academicRankRepository;
+    private final AcademicRankLocaleService academicRankLocaleService;
 
-    public TeacherService(TeacherRepository teacherRepository, AcademicRankLocaleRepository academicRankLocaleRepository, AcademicRankRepository academicRankRepository) {
+    // @Autowired
+    public TeacherService(TeacherRepository teacherRepository, AcademicRankLocaleService academicRankLocaleService) {
         this.teacherRepository = teacherRepository;
-        this.academicRankLocaleRepository = academicRankLocaleRepository;
-        this.academicRankRepository = academicRankRepository;
-    }
-
-    @PostConstruct
-    public void init() {
-        UUID id1 = UUID.fromString("9b04e73a-5c4f-4cbc-831b-d6db270453df");
-        Teacher teacher1 = new Teacher(id1, "Sergiu-Adrian", "Darabant", academicRankRepository.getReferenceById(1));
-        teacherRepository.save(teacher1);
-
-        UUID id2 = UUID.fromString("54b8e418-62a8-4bfc-9caf-c1b8798e2597");
-        Teacher teacher2 = new Teacher(id2, "Dumitru", "Dumitru", academicRankRepository.getReferenceById(2));
-        teacherRepository.save(teacher2);
+        this.academicRankLocaleService = academicRankLocaleService;
     }
 
     public List<Teacher> getTeachersByAcademicRankId(Integer id) {
@@ -51,18 +34,49 @@ public class TeacherService {
     }
 
     public List<TeacherResponse> getTeachersWithLocalizedNames(String languageTag) {
-        List<Teacher> teachers = teacherRepository.findAll();
+        // TODO: redo the repository.getAllTeacherRanks_LocalizedNames_CodeNames() to return a TeacherLocalized object, more info at method definition
+        List<TeacherResponse> teachers = new ArrayList<>();
+        List<List<String>> teacherNameParts = teacherRepository.getAllTeacherRanks_LocalizedNames_CodeNames(languageTag);
+        for (List<String> teacherNamePart : teacherNameParts) {
+            String teacherId = teacherNamePart.get(0);
+            String teacherAcademicRank = teacherNamePart.get(1);
+            String teacherName = teacherNamePart.get(2);
+            String teacherSurname = teacherNamePart.get(3);
+            String teacherCodeName = teacherNamePart.get(4);
+            teachers.add(new TeacherResponse(UUID.fromString(teacherId), teacherAcademicRank + ' ' + teacherName + ' ' + teacherSurname, teacherCodeName));
+        }
+        return teachers;
+    }
 
-        return teachers.stream().map(teacher -> {
-            Integer rankId = teacher.getAcademicRank().getAcademicRankId();
-            AcademicRankLocale rankLocale = academicRankLocaleRepository
-                    .findByAcademicRank_AcademicRankIdAndAcademicRankLocaleKey_LanguageTag(
-                            rankId, languageTag);
+    public TeacherResponse getTeacherWithLocalizedNameByCodeName(String codeName, String languageTag) {
+        try {
+            Teacher teacher = teacherRepository.getTeacherLocalizedByCodeName(codeName, languageTag);
+            if (teacher == null) {
+                throw new Exception();
+            }
 
+            String rankAbbreviationLocaleName = this.academicRankLocaleService.getAcademicRankLocalesByAcademicRankId(teacher.getAcademicRank().getAcademicRankId(), languageTag).getAcademicRankAbbreviationLocaleName();
+            String teacherNameWithRank = rankAbbreviationLocaleName + " " + teacher.getFirstName() + " " + teacher.getSurname();
+            return new TeacherResponse(teacher.getTeacherId(), teacherNameWithRank, teacher.getCodeName());
+        } catch (Exception e) {
+            System.out.println("Teacher with code name " + codeName + " not found");
+            return null;
+        }
+    }
 
-            String rank = (rankLocale != null) ? rankLocale.getAcademicRankAbbreviationLocaleName() : academicRankRepository.findByAcademicRankId(rankId).getRankName();
-            String professorNameWithRank = rank + " " + teacher.getFirstName() + " " + teacher.getSurname();
-            return new TeacherResponse(teacher.getTeacherId(), professorNameWithRank);
-        }).collect(Collectors.toList());
+    public TeacherResponse getTeacherWithLocalizedNameById(UUID teacherId, String languageTag) {
+        try {
+            Teacher teacher = teacherRepository.getTeacherLocalizedById(teacherId, languageTag);
+            if (teacher == null) {
+                throw new Exception();
+            }
+            String rankAbbreviationLocaleName = this.academicRankLocaleService.getAcademicRankLocalesByAcademicRankId(teacher.getAcademicRank().getAcademicRankId(), languageTag).getAcademicRankAbbreviationLocaleName();
+            String teacherNameWithRank = rankAbbreviationLocaleName + " " + teacher.getFirstName() + " " + teacher.getSurname();
+            return new TeacherResponse(teacherId, teacherNameWithRank, teacher.getCodeName());
+
+        } catch (Exception e) {
+            System.out.println("Teacher with id " + teacherId + " not found");
+            return null;
+        }
     }
 }

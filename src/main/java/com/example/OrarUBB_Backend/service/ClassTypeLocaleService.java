@@ -15,11 +15,11 @@ public class ClassTypeLocaleService {
     @Autowired
     private ClassTypeLocaleRepository classTypeLocaleRepository;
 
-    public Optional<ClassTypeLocale> getClassTypeLocale(UUID classTypeId, String languageTag) {
+    public Optional<ClassTypeLocale> getClassTypeLocale(int classTypeId, String languageTag) {
         return classTypeLocaleRepository.findByClassTypeIdAndLanguageTag(classTypeId, languageTag);
     }
 
-    public List<ClassTypeLocale> getLocalesByClassTypeId(UUID classTypeId) {
+    public List<ClassTypeLocale> getLocalesByClassTypeId(int classTypeId) {
         return classTypeLocaleRepository.findAllByClassTypeId(classTypeId);
     }
 }

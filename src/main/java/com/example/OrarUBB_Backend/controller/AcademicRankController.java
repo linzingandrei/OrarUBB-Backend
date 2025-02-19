@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Validated
 public class AcademicRankController {
+    // endpoint will probably not be used
     private final AcademicRankService academicRankService;
 
     @GetMapping("/")

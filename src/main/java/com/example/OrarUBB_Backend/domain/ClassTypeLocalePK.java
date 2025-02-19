@@ -6,9 +6,9 @@ import java.util.UUID;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode
-public class CourseCodeNameLocalePK implements Serializable {
-    private int courseCodeNameId;
+public class ClassTypeLocalePK implements Serializable {
+    private int classTypeId;
     private String languageTag;
 
-    // Default constructor, getters, and setters if needed
+    // Default constructor, getters, and setters (if needed)
 }
