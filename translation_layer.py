@@ -5,20 +5,18 @@ import psycopg2
 
 # MySQL connection parameters
 mysql_config = {
-    'host': 'localhost',  # Replace with your MySQL host
-    'port': 3306,
-    'user': 'root',  # Replace with your MySQL username
+    'host': '****',  # Replace with your MySQL host
+    'user': '****',  # Replace with your MySQL username
     'password': '****',  # Replace with your MySQL password
-    'database': 'orar2015'  # Replace with your MySQL database name
+    'database': '****'  # Replace with your MySQL database name
 }
 
 # PostgreSQL connection parameters
 postgres_config = {
-    'host': 'localhost',
-    'port': 9876,
-    'user': 'postgres',  # Replace with your PostgreSQL username
+    'host': '****',
+    'user': '****',  # Replace with your PostgreSQL username
     'password': '****',  # Replace with your PostgreSQL password
-    'database': 'postgres'  # Replace with your PostgreSQL database name
+    'database': '*****'  # Replace with your PostgreSQL database name
 }
 
 # Connect to MySQL database
@@ -115,7 +113,6 @@ def new_insert_teachers(data):
     query_teacher = """ INSERT INTO teacher (teacher_id, academic_rank_id, first_name, surname, code_name) VALUES (%s, %s, %s, %s, %s)"""
 
     try:
-
         for row in data:
             academic_rank_id = row.get("post")
             full_name = row.get("nume").split(' ', 1)
@@ -125,7 +122,7 @@ def new_insert_teachers(data):
                 surname = full_name[1]
             code_name = row.get("cod")
             uuid_code = str(uuid.uuid5(uuid.NAMESPACE_URL, name=str(full_name)))
-            # print(uuid_code)
+            print(uuid_code)
             postgres_cursor.execute(query_teacher, (uuid_code, academic_rank_id, first_name, surname, code_name))
         postgres_conn.commit()
         print("Data inserted into PostgreSQL successfully.")
@@ -347,8 +344,23 @@ def new_insert_class_instances(data):
             postgres_cursor.execute(get_teacher_id_query, (teacher,))
             teacher_id = postgres_cursor.fetchone()[0]
 
-            start_hour = row.get("ora_i")
-            end_hour = str(int(row.get("ora_s")) + 1)
+            ore_start_id = row.get("ora_i")
+            mysql_cursor.execute("SELECT ora_i FROM ore WHERE id = %s", (ore_start_id,))
+            ore_start_result = mysql_cursor.fetchone()
+            if ore_start_result is None:
+                print(f"Warning: No start hour found in 'ore' for id {ore_start_id}. Skipping row.")
+                continue
+            start_hour = ore_start_result["ora_i"]
+
+            ore_end_id = row.get("ora_s")
+            mysql_cursor.execute("SELECT ora_s FROM ore WHERE id = %s", (ore_end_id,))
+            ore_end_result = mysql_cursor.fetchone()
+            if ore_end_result is None:
+                print(f"Warning: No end hour found in 'ore' for id {ore_end_id}. Skipping row.")
+                continue
+            end_hour = ore_end_result["ora_s"]
+
+
             frequency = row.get("tiprep")
 
             postgres_cursor.execute(class_instance_query, (class_id, class_type_id, course_instance_id, class_day_id, formation_id, room_id, teacher_id, start_hour, end_hour, frequency))
@@ -360,3 +372,95 @@ def new_insert_class_instances(data):
         postgres_conn.rollback()
 
 # translate_class_instances()
+
+def run_all_translations():
+    print("Starting all table translations...\n")
+    print("Translating Academic Ranks...")
+    translate_academic_ranks()
+    
+    print("\nTranslating Teachers (and Days)...")
+    translate_teachers()
+    
+    print("\nTranslating Academic Specializations and Localization...")
+    translate_academic_specialization_and_localization()
+    
+    print("\nTranslating Formations...")
+    translate_formations()
+    
+    print("\nTranslating Rooms...")
+    translate_rooms()
+    
+    print("\nTranslating Course Code Names and Instances...")
+    translate_course_code_names_and_instances()
+    
+    print("\nInserting Class Types...")
+    insert_class_types()
+    
+    print("\nTranslating Class Instances...")
+    translate_class_instances()
+    
+    # If you want to translate days separately, uncomment below:
+    # print("\nTranslating Days...")
+    # query = "SELECT * FROM zile"
+    # mysql_cursor.execute(query)
+    # data = mysql_cursor.fetchall()
+    # new_insert_days(data)
+    
+    print("\nAll translations completed.")
+
+
+def main():
+    menu = """
+==============================
+   Database Translation Menu
+==============================
+1. Translate Academic Ranks
+2. Translate Teachers (and Days)
+3. Translate Academic Specializations and Localization
+4. Translate Formations
+5. Translate Rooms
+6. Translate Course Code Names and Instances
+7. Insert Class Types
+8. Translate Class Instances
+9. Translate Days
+0. All Table Translations
+q. Quit
+"""
+    while True:
+        print(menu)
+        choice = input("Enter your choice: ").strip().lower()
+        
+        if choice == "1":
+            translate_academic_ranks()
+        elif choice == "2":
+            translate_teachers()
+        elif choice == "3":
+            translate_academic_specialization_and_localization()
+        elif choice == "4":
+            translate_formations()
+        elif choice == "5":
+            translate_rooms()
+        elif choice == "6":
+            translate_course_code_names_and_instances()
+        elif choice == "7":
+            insert_class_types()
+        elif choice == "8":
+            translate_class_instances()
+        elif choice == "9":
+            # Translate days separately
+            query = "SELECT * FROM zile"
+            mysql_cursor.execute(query)
+            data = mysql_cursor.fetchall()
+            new_insert_days(data)
+        elif choice == "0":
+            run_all_translations()
+        elif choice == "q":
+            print("Exiting...")
+            break
+        else:
+            print("Invalid option. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
+

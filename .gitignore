@@ -36,3 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 .DS_Store
+myenv
+/src/main/resources/application-secrets.yml

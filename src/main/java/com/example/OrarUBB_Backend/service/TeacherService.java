@@ -36,7 +36,9 @@ public class TeacherService {
     public List<TeacherResponse> getTeachersWithLocalizedNames(String languageTag) {
         // TODO: redo the repository.getAllTeacherRanks_LocalizedNames_CodeNames() to return a TeacherLocalized object, more info at method definition
         List<TeacherResponse> teachers = new ArrayList<>();
+	System.out.println("teachers:" + teachers);
         List<List<String>> teacherNameParts = teacherRepository.getAllTeacherRanks_LocalizedNames_CodeNames(languageTag);
+	System.out.println("teacherNameParts: " + teacherNameParts);
         for (List<String> teacherNamePart : teacherNameParts) {
             String teacherId = teacherNamePart.get(0);
             String teacherAcademicRank = teacherNamePart.get(1);
