@@ -4,7 +4,8 @@ spring:
 
   config:
     import: application-secrets.yml
-  
+  main:
+    lazy-initialization: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -14,6 +15,10 @@ management:
     jmx:
       exposure:
         include: '*'
+
+app:
+  protect:
+    authenticated: /test/
 
 server:
   address: 0.0.0.0
