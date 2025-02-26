@@ -2,11 +2,10 @@ spring:
   application:
     name: OrarUBB-Backend 
 
-  datasource:
-    url: jdbc:postgresql://localhost:9876/postgres
-    username: postgres
-    password: untested-hate-club
-  
+  config:
+    import: application-secrets.yml
+  main:
+    lazy-initialization: true
   jpa:
     hibernate:
       ddl-auto: update
@@ -17,6 +16,13 @@ management:
       exposure:
         include: '*'
 
+app:
+  protect:
+    authenticated: /test/
+
 server:
   address: 0.0.0.0
   port: 8080
+  forward-headers-strategy: native
+  servlet:
+    context-path: /apps/orar/api
