@@ -36,6 +36,7 @@ public class UserDataController {
             @PathVariable("group") String group
     )
     {
+        System.out.println("Path /user/classes/" + userId + "/" + group + " called");
         userClassRelationService.mapGroupCoursesToUser(userId, group);
                 return ResponseEntity.ok("Group classes mapped to user");
     }

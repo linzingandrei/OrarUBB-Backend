@@ -66,7 +66,7 @@ public interface ClassInstanceRepository extends JpaRepository<ClassInstance, UU
             "JOIN DayDefinitionLocale day_def_loc ON day_def_loc.dayDefinition.dayId = cls_i.dayId AND day_def_loc.languageTag = :languageTag " +
             "JOIN CourseInstance crs_i ON cls_i.courseInstanceId = crs_i.courseInstanceId JOIN CourseCodeNameLocale crs_loc ON crs_loc.courseCodeNameId = crs_i.courseId AND crs_loc.languageTag = :languageTag " +
             "ORDER BY day_def_loc.dayDefinition.dayId, cls_i.startHour ASC")
-    public List<Object[]> findClassInstanceByClassId(UUID classId, @Param("languageTag") String languageTag);
+    public List<Object[]> findClassInstanceByClassId(@Param("classId") UUID classId, @Param("languageTag") String languageTag);
 
     @Query("SELECT cls_i.classId, day_def_loc.dayNameLocale, cls_i.startHour, cls_i.endHour, cls_i.frequency, r.name,f.code,cls_type_loc.classTypeLocale,crs_i.courseCode, " +
             "crs_loc.courseNameLocale,ac_r_loc.academicRankAbbreviationLocaleName,t.firstName,t.surname,t.codeName " +

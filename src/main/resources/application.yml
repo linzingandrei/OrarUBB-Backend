@@ -16,10 +16,6 @@ management:
       exposure:
         include: '*'
 
-app:
-  protect:
-    authenticated: /test/
-
 server:
   address: 0.0.0.0
   port: 8080

@@ -72,6 +72,7 @@ public class ClassInstanceService {
         List<ClassInstanceResponse> results = new ArrayList<>();
         if (formationService.isYearCode(groupCode)) {
             List<Object[]> queryResults = classInstanceRepository.findClassInstancesByGroupAndLanguageTag(groupCode, language);
+            System.out.println(queryResults);
             results.addAll(this.mapObjectsToClassInstanceResponse(queryResults));
         }
         else if (formationService.isGroupCode(groupCode)) {
