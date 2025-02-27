@@ -57,6 +57,7 @@ public class ClassInstanceController {
 
         Set<String> validLanguages = Set.of("ro-RO", "en-GB", "de-DE", "hu-HU");
         groupCode = groupCode.replace("-", "/");
+        System.out.println(groupCode);
         if (validLanguages.contains(language)) {
             List<ClassInstanceResponse> classes = classInstanceService.getClassesForGroup(groupCode, language);
             return ResponseEntity.ok(classes);
